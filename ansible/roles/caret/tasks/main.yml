@@ -1,0 +1,194 @@
+---
+# sudo apt-add-repository ppa:lttng/stable-2.12 && sudo apt update
+- name: lttng Install dependencies for setting up sources
+  apt_repository:
+    repo: ppa:lttng/stable-2.12
+    update_cache: yes
+  become: yes
+# sudo apt-get install lttng-tools lttng-modules-dkms liblttng-ust-dev
+- name: lttng Install 
+  apt:
+    name:
+      - lttng-tools
+      - lttng-modules-dkms
+      - liblttng-ust-dev
+  become: yes
+# sudo apt-get install python3-babeltrace python3-lttng
+- name: babeltrace Install
+  apt:
+    name:
+      - python3-babeltrace
+      - python3-lttng
+  become: yes
+
+  # # sudo apt update && sudo apt install -y \
+  # build-essential \
+  # cmake \
+  # git \
+  # python3-colcon-common-extensions \
+  # python3-flake8 \
+  # python3-pip \
+  # python3-pytest-cov \
+  # python3-rosdep \
+  # python3-setuptools \
+  # python3-vcstool \
+  # wget
+- name: Install dependencies of python
+  apt:
+    name: 
+      - build-essential
+      - cmake
+      - git
+      - python3-colcon-common-extensions
+      - python3-flake8
+      - python3-pip
+      - python3-pytest-cov
+      - python3-rosdep
+      - python3-setuptools
+      - python3-vcstool
+      - wget
+  become: yes
+
+  # python3 -m pip install -U \
+  # flake8-blind-except \
+  # flake8-builtins \
+  # flake8-class-newline \
+  # flake8-comprehensions \
+  # flake8-deprecated \
+  # flake8-docstrings \
+  # flake8-import-order \
+  # flake8-quotes \
+  # pytest-repeat \
+  # pytest-rerunfailures \
+  # pytest \
+  # setuptools \
+  # colorcet
+- name: install some python modules for caret
+  pip:
+    name:
+      - flake8-blind-except 
+      - flake8-builtins 
+      - flake8-class-newline 
+      - flake8-comprehensions 
+      - flake8-deprecated 
+      - flake8-docstrings 
+      - flake8-import-order 
+      - flake8-quotes 
+      - pytest-repeat 
+      - pytest-rerunfailures 
+      - pytest 
+      - setuptools 
+      - colorcet
+    executable: pip3
+  become: yes
+
+  # sudo apt install ros-galactic-desktop
+- name: ros-galactic Install
+  apt:
+    name:
+      - ros-galactic-desktop
+  become: yes
+
+  # sudo apt install -y \
+  # ros-galactic-ros2trace \
+  # ros-galactic-ros2trace-analysis \
+  # ros-galactic-tracetools \
+  # ros-galactic-tracetools-analysis \
+  # ros-galactic-tracetools-launch \
+  # ros-galactic-tracetools-read \
+  # ros-galactic-tracetools-test \
+  # ros-galactic-tracetools-trace
+- name: Install ros2 trace related packages
+  apt:
+    name:
+      - ros-galactic-ros2trace 
+      - ros-galactic-ros2trace-analysis 
+      - ros-galactic-tracetools 
+      - ros-galactic-tracetools-analysis 
+      - ros-galactic-tracetools-launch 
+      - ros-galactic-tracetools-read 
+      - ros-galactic-tracetools-test 
+      - ros-galactic-tracetools-trace
+  become: yes
+
+# sudo apt update && sudo apt install -y \
+#   graphviz \
+#   graphviz-dev
+- name: Install graphviz 
+  apt:
+    name:
+      - graphviz
+      - graphviz-dev
+    update_cache: yes
+  become: yes
+
+  # python3 -m pip install -U \
+  # pytest-mock \
+  # pybind11 \
+  # 'pandas>=1.4.0' \
+  # bokeh \
+  # pandas-bokeh \
+  # jupyterlab \
+  # graphviz
+- name: Install caret dependent packages
+  pip:
+    name:
+      - pytest-mock 
+      - pybind11 
+      - 'pandas>=1.4.0' 
+      - bokeh 
+      - pandas-bokeh 
+      - jupyterlab 
+      - graphviz
+    executable: pip3
+  become: yes
+
+# rosdep install \
+#   --from-paths src --ignore-src \
+#   --rosdistro galactic -y \
+#   --skip-keys "console_bridge fastcdr fastrtps rti-connext-dds-5.3.1 urdfdom_headers"
+- name: caret (rosdep install dependencies)
+  shell: | 
+        rosdep install -y --from-paths src --ignore-src --rosdistro {{ rosdistro }} -y --skip-keys "console_bridge fastcdr fastrtps rti-connext-dds-5.3.1 urdfdom_headers"
+  args:
+    chdir: "{{ WORKSPACE_ROOT }}"
+
+# wget https://raw.githubusercontent.com/tier4/CARET_doc/main/caret.repos
+- name: Download caret.repos
+  get_url:
+    url: https://raw.githubusercontent.com/tier4/CARET_doc/main/caret.repos
+    dest: "{{ WORKSPACE_ROOT }}/caret.repos"
+    mode: 0775
+
+# vcs import src < caret.repos --recursive
+- name: import caret packages
+  shell:
+    cmd: vcs import src < caret.repos --recursive
+    chdir: "{{ WORKSPACE_ROOT }}"
+
+- name: caret (link ros2_tracing)
+  command: "ln -sf {{ WORKSPACE_ROOT }}/src/ros-tracing/ros2_tracing/tracetools/include/tracetools/  {{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp/include/ "
+
+- name: caret (link rclcpp_action)
+  command: "ln -sf {{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp_action/include/rclcpp_action/  {{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp/include/"
+
+- name: caret (link rclcpp_components)
+  command: "ln -sf {{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp_components/include/rclcpp_components/ {{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp/include/"
+
+- name: caret (link rclcpp_lifecycle)
+  command: "ln -sf {{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp_lifecycle/include/rclcpp_lifecycle/ {{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp/include/"
+
+# source /opt/ros/galactic/setup.bash
+# colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=off  --symlink-install
+- name: source ros2 and build caret
+  shell: source /opt/ros/galactic/setup.bash && colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=off --symlink-install
+  args:
+     executable: /bin/bash
+     chdir: "{{ WORKSPACE_ROOT }}"
+
+- name: caret (Add settings to .bashrc)
+  lineinfile:
+    dest: ~/.bashrc
+    line: "source {{ WORKSPACE_ROOT }}/install/local_setup.bash"
+    state: present
+  become: no

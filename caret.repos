@@ -1,0 +1,29 @@
+repositories:
+  ros2/rcl:
+    type: git
+    url: https://github.com/ros2/rcl.git
+    version: galactic
+  ros2/rclcpp:
+    type: git
+    url: https://github.com/tier4/rclcpp.git
+    version: galactic_tracepoint_added
+  ros-tracing/ros2_tracing:
+    type: git
+    url: https://github.com/tier4/ros2_tracing.git
+    version: galactic_tracepoint_added
+  CARET/CARET_trace:
+    type: git
+    url: https://github.com/tier4/CARET_trace.git
+    version: main
+  CARET/CARET_analyze:
+    type: git
+    url: https://github.com/tier4/CARET_analyze.git
+    version: main
+  CARET/CARET_analyze_cpp_impl:
+    type: git
+    url: https://github.com/tier4/CARET_analyze_cpp_impl.git
+    version: main
+  CARET/ros2caret:
+    type: git
+    url: https://github.com/tier4/ros2caret.git
+    version: main

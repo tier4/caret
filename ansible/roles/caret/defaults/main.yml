@@ -1,0 +1,2 @@
+rosdistro: "galactic"
+skip_keys: console_bridge fastcdr fastrtps rti-connext-dds-5.3.1 urdfdom_headers
