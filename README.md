@@ -1,4 +1,4 @@
-<h2 align="center"></h2>
+<h2 align="center">CARET</h2>
 
 ### Setup
 -  git clone https://github.com/tier4/caret.git ros2_caret_ws
