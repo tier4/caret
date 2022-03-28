@@ -1,4 +1,4 @@
-- repository: autowarefoundation/autoware
+- repository: tier4/caret
   files:
 #    - source: CODE_OF_CONDUCT.md
 #    - source: CONTRIBUTING.md
@@ -27,8 +27,8 @@
 #    - source: CPPLINT.cfg
 #    - source: setup.cfg
 
-- repository: autowarefoundation/autoware_common
-  files:
+#- repository: autowarefoundation/autoware_common
+#  files:
 #    - source: .github/workflows/build-and-test.yaml
 #    - source: .github/workflows/build-and-test-differential.yaml
 #    - source: .github/workflows/build-and-test-differential-self-hosted.yaml
