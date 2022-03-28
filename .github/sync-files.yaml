@@ -1,4 +1,4 @@
-- repository: tier4/caret
+- repository: autowarefoundation/autoware
   files:
 #    - source: CODE_OF_CONDUCT.md
 #    - source: CONTRIBUTING.md
