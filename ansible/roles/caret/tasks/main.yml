@@ -1,10 +1,46 @@
 ---
+- name: Install dependencies for setting up apt sources
+  become: true
+  ansible.builtin.apt:
+    name:
+      - curl
+      - gnupg
+      - lsb-release
+    update_cache: true
+
+# sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+- name: Authorize ROS GPG key
+  become: true
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/ros/rosdistro/master/ros.key
+    dest: /usr/share/keyrings/ros-archive-keyring.gpg
+    
+- name: Save result of 'dpkg --print-architecture'
+  ansible.builtin.command: dpkg --print-architecture
+  register: deb_architecture
+  changed_when: false
+
+- name: Save result of 'source /etc/os-release && echo $UBUNTU_CODENAME'
+  ansible.builtin.shell: bash -c 'source /etc/os-release && echo $UBUNTU_CODENAME'
+  register: ubuntu_codename
+  changed_when: false
+
+# echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+- name: Add ROS 2 apt repository to source list
+  become: true
+  ansible.builtin.apt_repository:
+    repo: deb [arch={{ deb_architecture.stdout }} signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu {{ ubuntu_codename.stdout }} main
+    filename: ros2
+    state: present
+    update_cache: true
+
 # sudo apt-add-repository ppa:lttng/stable-2.12 && sudo apt update
 - name: lttng Install dependencies for setting up sources
   apt_repository:
     repo: ppa:lttng/stable-2.12
     update_cache: yes
   become: yes
+  
 # sudo apt-get install lttng-tools lttng-modules-dkms liblttng-ust-dev
 - name: lttng Install 
   apt:
@@ -41,7 +77,6 @@
       - git
       - python3-colcon-common-extensions
       - python3-flake8
-      - python3-pip
       - python3-pytest-cov
       - python3-rosdep
       - python3-setuptools
@@ -143,6 +178,10 @@
     executable: pip3
   become: yes
 
+- name: rosdep update
+  command: rosdep update
+  become: yes
+
 # rosdep install \
 #   --from-paths src --ignore-src \
 #   --rosdistro galactic -y \
@@ -152,13 +191,6 @@
         rosdep install -y --from-paths src --ignore-src --rosdistro {{ rosdistro }} -y --skip-keys "console_bridge fastcdr fastrtps rti-connext-dds-5.3.1 urdfdom_headers"
   args:
     chdir: "{{ WORKSPACE_ROOT }}"
-
-# wget https://raw.githubusercontent.com/tier4/CARET_doc/main/caret.repos
-- name: Download caret.repos
-  get_url:
-    url: https://raw.githubusercontent.com/tier4/CARET_doc/main/caret.repos
-    dest: "{{ WORKSPACE_ROOT }}/caret.repos"
-    mode: 0775
 
 # vcs import src < caret.repos --recursive
 - name: import caret packages

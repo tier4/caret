@@ -38,32 +38,45 @@ if [[ $answer = [cC] ]]; then
   answer="y"
 fi
 
+# Install sudo
+if ! (command -v sudo >/dev/null 2>&1); then
+    apt-get -y update
+    apt-get -y install sudo
+fi
+
+# Install pip for ansible
+if ! (command -v pip3 >/dev/null 2>&1); then
+    sudo apt-get -y update
+    sudo apt-get -y install python3-pip
+fi
+
 # Run ansible if confirmed
 case $answer in
   [yY]* )
-    # Install ansible
-    if ! (command -v ansible-playbook  > /dev/null 2>&1); then
-      sudo apt-get install -y ansible
-    fi
+  # Install ansible
+  ansible_version=$(pip3 list | grep -oP "^ansible\s+\K([0-9]+)" || true)
+  if [ "$ansible_version" != "5" ]; then
+    sudo apt-get -y purge ansible
+    sudo pip3 install -U "ansible==5.*"
+  fi  
+  # Set options
+  if [ $noninteractive -eq 0 ]; then
+    options=("--ask-become-pass")
+  else
+    options=("--extra-vars" "yn_gpu=y")
+  fi
 
-    # Set options
-    if [ $noninteractive -eq 0 ]; then
-      options=("--ask-become-pass")
-    else
-      options=("--extra-vars" "yn_gpu=y")
-    fi
-
-    # Run ansible
-    if ansible-playbook "$SCRIPT_DIR/ansible/playbook.yml" -e WORKSPACE_ROOT="$SCRIPT_DIR" "${options[@]}"; then
-      echo -e "\e[32mCompleted.\e[0m"
-      exit 0
-    else
-      echo -e "\e[31mFailed.\e[0m"
-      exit 1
-    fi
-    ;;
-  * )
-    echo -e "\e[33mCancelled.\e[0m"
+  # Run ansible
+  if ansible-playbook "$SCRIPT_DIR/ansible/playbook.yml" -e WORKSPACE_ROOT="$SCRIPT_DIR" "${options[@]}"; then
+    echo -e "\e[32mCompleted.\e[0m"
+    exit 0
+  else
+    echo -e "\e[31mFailed.\e[0m"
     exit 1
-    ;;
+  fi
+  ;;
+  * )
+  echo -e "\e[33mCancelled.\e[0m"
+  exit 1
+  ;;
 esac
