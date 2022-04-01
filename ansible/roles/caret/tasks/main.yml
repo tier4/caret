@@ -178,6 +178,16 @@
     executable: pip3
   become: yes
 
+- name: Check if rosdep has already been initalised
+  stat:
+    path: /etc/ros/rosdep/sources.list.d/20-default.list
+  register: already_init
+
+- name: Run rosdep init
+  command: rosdep init -y --reinstall
+  become: true
+  when: already_init.stat.exists == False
+
 - name: rosdep update
   command: rosdep update
   become: yes
