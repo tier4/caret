@@ -34,12 +34,12 @@
 - name: Install ros-tracing
   apt:
     name:
-      - ros-galactic-ros2trace
-      - ros-galactic-ros2trace-analysis
-      - ros-galactic-tracetools
-      - ros-galactic-tracetools-analysis
-      - ros-galactic-tracetools-launch
-      - ros-galactic-tracetools-read
-      - ros-galactic-tracetools-test
-      - ros-galactic-tracetools-trace
+      - ros-{{ rosdistro }}-ros2trace
+      - ros-{{ rosdistro }}-ros2trace-analysis
+      - ros-{{ rosdistro }}-tracetools
+      - ros-{{ rosdistro }}-tracetools-analysis
+      - ros-{{ rosdistro }}-tracetools-launch
+      - ros-{{ rosdistro }}-tracetools-read
+      - ros-{{ rosdistro }}-tracetools-test
+      - ros-{{ rosdistro }}-tracetools-trace
   become: true

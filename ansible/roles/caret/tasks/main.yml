@@ -1,6 +1,6 @@
 - name: caret (rosdep install dependencies)
   shell: |
-    rosdep install -y --from-paths src --ignore-src --rosdistro {{ rosdistro }} -y --skip-keys "console_bridge fastcdr fastrtps rti-connext-dds-5.3.1 urdfdom_headers"
+    rosdep install -y --from-paths src --ignore-src --rosdistro {{ rosdistro }} -y --skip-keys "{{ targeted_skip_keys }}"
   args:
     chdir: "{{ WORKSPACE_ROOT }}"
 
@@ -31,3 +31,17 @@
     dest: "{{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp/include/rclcpp_lifecycle"
     state: link
     force: true
+
+- name: caret (copy CARET setenv template as reference)
+  ansible.builtin.template:
+    src: "{{ setenv_caret_script_template }}"
+    dest: "{{ WORKSPACE_ROOT }}/setenv_caret.bash"
+    mode: 0755
+  become: false
+
+- name: caret (copy topic filter as reference)
+  ansible.builtin.template:
+    src: "{{ caret_topic_filter_template }}"
+    dest: "{{ WORKSPACE_ROOT }}/caret_topic_filter.bash"
+    mode: 0755
+  become: false
