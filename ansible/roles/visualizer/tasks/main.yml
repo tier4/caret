@@ -1,0 +1,22 @@
+- name: Install graphviz
+  apt:
+    name:
+      - graphviz
+      - graphviz-dev
+    update_cache: true
+  become: true
+
+- name: Install caret dependent packages
+  pip:
+    name:
+      - pytest-mock
+      - pybind11
+      - pandas>={{ pandas_version }}
+      - bokeh
+      - pandas-bokeh
+      - jupyterlab
+      - graphviz
+      - colorcet
+    executable: pip3
+    extra_args: --ignore-installed
+  become: true

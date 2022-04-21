@@ -1,0 +1,20 @@
+- name: LTTng (add source list)
+  apt_repository:
+    repo: ppa:lttng/{{ lttng_version }}
+    update_cache: true
+  become: true
+
+- name: LTTng (apt install lttng/{{ lttng_version }})
+  apt:
+    name:
+      - lttng-tools
+      - lttng-modules-dkms
+      - liblttng-ust-dev
+  become: true
+
+- name: LTTng (install babeltrace)
+  apt:
+    name:
+      - python3-babeltrace
+      - python3-lttng
+  become: true

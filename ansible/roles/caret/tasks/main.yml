@@ -1,236 +1,33 @@
----
-- name: Install dependencies for setting up apt sources
-  become: true
-  ansible.builtin.apt:
-    name:
-      - curl
-      - gnupg
-      - lsb-release
-    update_cache: true
-
-# sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-- name: Authorize ROS GPG key
-  become: true
-  ansible.builtin.get_url:
-    url: https://raw.githubusercontent.com/ros/rosdistro/master/ros.key
-    dest: /usr/share/keyrings/ros-archive-keyring.gpg
-    
-- name: Save result of 'dpkg --print-architecture'
-  ansible.builtin.command: dpkg --print-architecture
-  register: deb_architecture
-  changed_when: false
-
-- name: Save result of 'source /etc/os-release && echo $UBUNTU_CODENAME'
-  ansible.builtin.shell: bash -c 'source /etc/os-release && echo $UBUNTU_CODENAME'
-  register: ubuntu_codename
-  changed_when: false
-
-# echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-- name: Add ROS 2 apt repository to source list
-  become: true
-  ansible.builtin.apt_repository:
-    repo: deb [arch={{ deb_architecture.stdout }} signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu {{ ubuntu_codename.stdout }} main
-    filename: ros2
-    state: present
-    update_cache: true
-
-# sudo apt-add-repository ppa:lttng/stable-2.12 && sudo apt update
-- name: lttng Install dependencies for setting up sources
-  apt_repository:
-    repo: ppa:lttng/stable-2.12
-    update_cache: yes
-  become: yes
-  
-# sudo apt-get install lttng-tools lttng-modules-dkms liblttng-ust-dev
-- name: lttng Install 
-  apt:
-    name:
-      - lttng-tools
-      - lttng-modules-dkms
-      - liblttng-ust-dev
-  become: yes
-# sudo apt-get install python3-babeltrace python3-lttng
-- name: babeltrace Install
-  apt:
-    name:
-      - python3-babeltrace
-      - python3-lttng
-  become: yes
-
-  # # sudo apt update && sudo apt install -y \
-  # build-essential \
-  # cmake \
-  # git \
-  # python3-colcon-common-extensions \
-  # python3-flake8 \
-  # python3-pip \
-  # python3-pytest-cov \
-  # python3-rosdep \
-  # python3-setuptools \
-  # python3-vcstool \
-  # wget
-- name: Install dependencies of python
-  apt:
-    name: 
-      - build-essential
-      - cmake
-      - git
-      - python3-colcon-common-extensions
-      - python3-flake8
-      - python3-pytest-cov
-      - python3-rosdep
-      - python3-setuptools
-      - python3-vcstool
-      - wget
-  become: yes
-
-  # python3 -m pip install -U \
-  # flake8-blind-except \
-  # flake8-builtins \
-  # flake8-class-newline \
-  # flake8-comprehensions \
-  # flake8-deprecated \
-  # flake8-docstrings \
-  # flake8-import-order \
-  # flake8-quotes \
-  # pytest-repeat \
-  # pytest-rerunfailures \
-  # pytest \
-  # setuptools \
-  # colorcet
-- name: install some python modules for caret
-  pip:
-    name:
-      - flake8-blind-except 
-      - flake8-builtins 
-      - flake8-class-newline 
-      - flake8-comprehensions 
-      - flake8-deprecated 
-      - flake8-docstrings 
-      - flake8-import-order 
-      - flake8-quotes 
-      - pytest-repeat 
-      - pytest-rerunfailures 
-      - pytest 
-      - setuptools 
-      - colorcet
-    executable: pip3
-  become: yes
-
-  # sudo apt install ros-galactic-desktop
-- name: ros-galactic Install
-  apt:
-    name:
-      - ros-galactic-desktop
-  become: yes
-
-  # sudo apt install -y \
-  # ros-galactic-ros2trace \
-  # ros-galactic-ros2trace-analysis \
-  # ros-galactic-tracetools \
-  # ros-galactic-tracetools-analysis \
-  # ros-galactic-tracetools-launch \
-  # ros-galactic-tracetools-read \
-  # ros-galactic-tracetools-test \
-  # ros-galactic-tracetools-trace
-- name: Install ros2 trace related packages
-  apt:
-    name:
-      - ros-galactic-ros2trace 
-      - ros-galactic-ros2trace-analysis 
-      - ros-galactic-tracetools 
-      - ros-galactic-tracetools-analysis 
-      - ros-galactic-tracetools-launch 
-      - ros-galactic-tracetools-read 
-      - ros-galactic-tracetools-test 
-      - ros-galactic-tracetools-trace
-  become: yes
-
-# sudo apt update && sudo apt install -y \
-#   graphviz \
-#   graphviz-dev
-- name: Install graphviz 
-  apt:
-    name:
-      - graphviz
-      - graphviz-dev
-    update_cache: yes
-  become: yes
-
-  # python3 -m pip install -U \
-  # pytest-mock \
-  # pybind11 \
-  # 'pandas>=1.4.0' \
-  # bokeh \
-  # pandas-bokeh \
-  # jupyterlab \
-  # graphviz
-- name: Install caret dependent packages
-  pip:
-    name:
-      - pytest-mock 
-      - pybind11 
-      - 'pandas>=1.4.0' 
-      - bokeh 
-      - pandas-bokeh 
-      - jupyterlab 
-      - graphviz
-    executable: pip3
-  become: yes
-
-- name: Check if rosdep has already been initalised
-  stat:
-    path: /etc/ros/rosdep/sources.list.d/20-default.list
-  register: already_init
-
-- name: Run rosdep init
-  command: rosdep init -y --reinstall
-  become: true
-  when: already_init.stat.exists == False
-
-- name: rosdep update
-  command: rosdep update
-  become: yes
-
-# rosdep install \
-#   --from-paths src --ignore-src \
-#   --rosdistro galactic -y \
-#   --skip-keys "console_bridge fastcdr fastrtps rti-connext-dds-5.3.1 urdfdom_headers"
 - name: caret (rosdep install dependencies)
-  shell: | 
-        rosdep install -y --from-paths src --ignore-src --rosdistro {{ rosdistro }} -y --skip-keys "console_bridge fastcdr fastrtps rti-connext-dds-5.3.1 urdfdom_headers"
+  shell: |
+    rosdep install -y --from-paths src --ignore-src --rosdistro {{ rosdistro }} -y --skip-keys "console_bridge fastcdr fastrtps rti-connext-dds-5.3.1 urdfdom_headers"
   args:
     chdir: "{{ WORKSPACE_ROOT }}"
 
-# vcs import src < caret.repos --recursive
-- name: import caret packages
-  shell:
-    cmd: vcs import src < caret.repos --recursive
-    chdir: "{{ WORKSPACE_ROOT }}"
+- name: caret (make symbolic link to rclcpp)
+  ansible.builtin.file:
+    src: "{{ WORKSPACE_ROOT }}/src/ros-tracing/ros2_tracing/tracetools/include/tracetools"
+    dest: "{{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp/include/tracetools"
+    state: link
+    force: true
 
-- name: caret (link ros2_tracing)
-  command: "ln -sf {{ WORKSPACE_ROOT }}/src/ros-tracing/ros2_tracing/tracetools/include/tracetools/  {{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp/include/ "
+- name: caret (make symbolic link to rclcpp_action)
+  ansible.builtin.file:
+    src: "{{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp_action/include/rclcpp_action"
+    dest: "{{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp/include/rclcpp_action"
+    state: link
+    force: true
 
-- name: caret (link rclcpp_action)
-  command: "ln -sf {{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp_action/include/rclcpp_action/  {{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp/include/"
+- name: caret (make symbolic link to rclcpp_components)
+  ansible.builtin.file:
+    src: "{{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp_components/include/rclcpp_components"
+    dest: "{{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp/include/rclcpp_components"
+    state: link
+    force: true
 
-- name: caret (link rclcpp_components)
-  command: "ln -sf {{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp_components/include/rclcpp_components/ {{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp/include/"
-
-- name: caret (link rclcpp_lifecycle)
-  command: "ln -sf {{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp_lifecycle/include/rclcpp_lifecycle/ {{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp/include/"
-
-# source /opt/ros/galactic/setup.bash
-# colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=off  --symlink-install
-- name: source ros2 and build caret
-  shell: source /opt/ros/galactic/setup.bash && colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=off --symlink-install
-  args:
-     executable: /bin/bash
-     chdir: "{{ WORKSPACE_ROOT }}"
-
-- name: caret (Add settings to .bashrc)
-  lineinfile:
-    dest: ~/.bashrc
-    line: "source {{ WORKSPACE_ROOT }}/install/local_setup.bash"
-    state: present
-  become: no
+- name: caret (make symbolic link to rclcpp_lifecycle)
+  ansible.builtin.file:
+    src: "{{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp_lifecycle/include/rclcpp_lifecycle"
+    dest: "{{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp/include/rclcpp_lifecycle"
+    state: link
+    force: true
