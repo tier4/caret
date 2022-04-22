@@ -1,6 +1,9 @@
----
 - hosts: localhost
   connection: local
-  become: no
+  become: false
   roles:
-    - { role: caret, tags: ["caret"] }
+    - { role: lttng, tags: [lttng] }
+    - { role: ros2, rosdistro: galactic, tags: [ros2] }
+    - { role: ros-tracing, rosdistro: galactic, tags: [ros-tracing] }
+    - { role: visualizer, tags: [visualizer] }
+    - { role: caret, rosdistro: galactic, tags: [caret] }
