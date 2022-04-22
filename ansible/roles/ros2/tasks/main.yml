@@ -8,11 +8,17 @@
     update_cache: true
   become: true
 
+- name: ROS2 (check ros2-latest.list)
+  stat:
+    path: /etc/apt/sources.list.d/ros2-latest.list
+  register: ros2_latest_list
+
 # sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key  -o /usr/share/keyrings/ros-archive-keyring.gpg
 - name: ROS2 (set up your keys)
   get_url:
     url: "{{ keyserver }}"
     dest: "{{ keyring_dest }}"
+  when: ros2_latest_list.stat.exists == false
   become: true
 
 # get architecture for ros2-repo
@@ -34,27 +40,6 @@
     state: latest
     update_cache: true
   become: true
-
-- name: ROS2 (check rosdep file)
-  stat:
-    path: /etc/ros/rosdep/sources.list.d/20-default.list
-  register: ros_repository
-
-- name: ROS2 (install rosdep)
-  apt:
-    name: python3-rosdep
-    state: latest
-    update_cache: true
-  become: true
-
-- name: ROS2 (initialize rosdep)
-  command: rosdep init
-  when: ros_repository.stat.exists == false
-  become: true
-
-- name: ROS2 (update rosdep)
-  command: rosdep update
-  become: false
 
 - name: ROS2 (install colcon)
   apt:

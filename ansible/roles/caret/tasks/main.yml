@@ -1,3 +1,24 @@
+- name: ROS2 (check rosdep file)
+  stat:
+    path: /etc/ros/rosdep/sources.list.d/20-default.list
+  register: ros_repository
+
+- name: ROS2 (install rosdep)
+  apt:
+    name: python3-rosdep
+    state: latest
+    update_cache: true
+  become: true
+
+- name: ROS2 (initialize rosdep)
+  command: rosdep init
+  when: ros_repository.stat.exists == false
+  become: true
+
+- name: ROS2 (update rosdep)
+  command: rosdep update
+  become: false
+
 - name: caret (rosdep install dependencies)
   shell: |
     rosdep install -y --from-paths src --ignore-src --rosdistro {{ rosdistro }} -y --skip-keys "{{ targeted_skip_keys }}"
