@@ -14,16 +14,16 @@ repositories:
   CARET/CARET_trace:
     type: git
     url: https://github.com/tier4/CARET_trace.git
-    version: main
+    version: v0.2.2
   CARET/CARET_analyze:
     type: git
     url: https://github.com/tier4/CARET_analyze.git
-    version: main
+    version: v0.2.2
   CARET/CARET_analyze_cpp_impl:
     type: git
     url: https://github.com/tier4/CARET_analyze_cpp_impl.git
-    version: main
+    version: v0.2.2
   CARET/ros2caret:
     type: git
     url: https://github.com/tier4/ros2caret.git
-    version: main
+    version: v0.2.2
