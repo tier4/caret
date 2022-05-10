@@ -2,15 +2,15 @@ repositories:
   ros2/rcl:
     type: git
     url: https://github.com/ros2/rcl.git
-    version: galactic
+    version: daecbef769e197f7e0ec9e9292920def40f7bb69
   ros2/rclcpp:
     type: git
     url: https://github.com/tier4/rclcpp.git
-    version: galactic_tracepoint_added
+    version: v0.2.2
   ros-tracing/ros2_tracing:
     type: git
     url: https://github.com/tier4/ros2_tracing.git
-    version: galactic_tracepoint_added
+    version: v0.2.2
   CARET/CARET_trace:
     type: git
     url: https://github.com/tier4/CARET_trace.git
