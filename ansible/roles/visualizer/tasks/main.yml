@@ -17,6 +17,7 @@
       - jupyterlab
       - graphviz
       - colorcet
+      - tqdm
     executable: pip3
     extra_args: --ignore-installed
   become: true
