@@ -3,7 +3,7 @@
   become: false
   roles:
     - { role: lttng, tags: [lttng] }
-    - { role: ros2, rosdistro: galactic, tags: [ros2] }
-    - { role: ros-tracing, rosdistro: galactic, tags: [ros-tracing] }
+    - { role: ros2, rosdistro: humble, tags: [ros2] }
+    - { role: ros-tracing, rosdistro: humble, tags: [ros-tracing] }
     - { role: visualizer, tags: [visualizer] }
-    - { role: caret, rosdistro: galactic, tags: [caret] }
+    - { role: caret, rosdistro: humble, tags: [caret] }
