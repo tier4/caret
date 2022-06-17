@@ -6,24 +6,24 @@ repositories:
   ros2/rclcpp:
     type: git
     url: https://github.com/tier4/rclcpp.git
-    version: v0.3.0
+    version: rc/v0.3.0
   ros-tracing/ros2_tracing:
     type: git
     url: https://github.com/tier4/ros2_tracing.git
-    version: v0.3.0
+    version: rc/v0.3.0
   CARET/CARET_trace:
     type: git
     url: https://github.com/tier4/CARET_trace.git
-    version: v0.3.0
+    version: rc/v0.3.0
   CARET/CARET_analyze:
     type: git
     url: https://github.com/tier4/CARET_analyze.git
-    version: v0.2.2  # use v0.2, since trace points are compatible to caret v0.2
+    version: rc/v0.2.2  # use v0.2, since trace points are compatible to caret v0.2
   CARET/CARET_analyze_cpp_impl:
     type: git
     url: https://github.com/tier4/CARET_analyze_cpp_impl.git
-    version: v0.2.2  # use v0.2, since trace points are compatible to caret v0.2
+    version: rc/v0.2.2  # use v0.2, since trace points are compatible to caret v0.2
   CARET/ros2caret:
     type: git
     url: https://github.com/tier4/ros2caret.git
-    version: v0.2.2  # use v0.2, since trace points are compatible to caret v0.2
+    version: rc/v0.2.2  # use v0.2, since trace points are compatible to caret v0.2
