@@ -21,7 +21,15 @@
 
 - name: caret (rosdep install dependencies)
   shell: |
-    rosdep install -y --from-paths src --ignore-src --rosdistro {{ rosdistro }} -y --skip-keys "{{ targeted_skip_keys }}"
+    rosdep install -y --from-paths ./ --ignore-src --rosdistro {{ rosdistro }} -y --skip-keys "{{ targeted_skip_keys }}"
+  args:
+    chdir: "{{ WORKSPACE_ROOT }}"
+
+- name: caret (install python module)
+  pip:
+    requirements: requirements.txt
+    executable: pip3
+  become: true
   args:
     chdir: "{{ WORKSPACE_ROOT }}"
 

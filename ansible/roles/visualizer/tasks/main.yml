@@ -8,15 +8,9 @@
 
 - name: Install caret dependent packages
   pip:
-    name:
-      - pytest-mock
-      - pybind11
-      - pandas>={{ pandas_version }}
-      - bokeh
-      - pandas-bokeh
-      - jupyterlab
-      - graphviz
-      - colorcet
+    requirements: "{{ requirments_path }}"
     executable: pip3
     extra_args: --ignore-installed
   become: true
+  args:
+    chdir: "{{ WORKSPACE_ROOT }}"

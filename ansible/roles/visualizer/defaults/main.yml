@@ -1,1 +1,2 @@
 pandas_version: 1.4.0
+requirments_path: src/CARET/ros2caret/requirements.txt
