@@ -7,7 +7,7 @@
 
 - name: install some python modules for caret
   pip:
-    requirements: "{{ requirments_path }}"
+    requirements: "{{ requirements_path }}"
     executable: pip3
   become: true
   args:

@@ -8,7 +8,7 @@
 
 - name: Install caret dependent packages
   pip:
-    requirements: "{{ requirments_path }}"
+    requirements: "{{ requirements_path }}"
     executable: pip3
     extra_args: --ignore-installed
   become: true
