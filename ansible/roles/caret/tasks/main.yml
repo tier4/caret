@@ -27,7 +27,7 @@
 
 - name: caret (install python module)
   pip:
-    requirements: requirements.txt
+    requirements: "{{ requirments_path }}"
     executable: pip3
   become: true
   args:
