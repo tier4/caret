@@ -7,3 +7,4 @@
     - { role: ros-tracing, rosdistro: galactic, tags: [ros-tracing] }
     - { role: visualizer, tags: [visualizer] }
     - { role: caret, rosdistro: galactic, tags: [caret] }
+    - { role: ubuntu, version: 20.04 }
