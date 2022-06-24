@@ -1,10 +1,10 @@
 #!/bin/bash
 
 SCRIPT_DIR=$(readlink -f "$(dirname "$0")")
-MACHINE_UBUNTU_VERSION=`cat /etc/issue`
+source /etc/lsb-release
 TOOL_UBUNTU_VERSION='20.04'
 
-if [[ ! $MACHINE_UBUNTU_VERSION =~ $TOOL_UBUNTU_VERSION ]] ; then
+if [[ ! $DISTRIB_RELEASE =~ $TOOL_UBUNTU_VERSION ]] ; then
     echo "exit : ubuntu version is invalid"
     echo "install ubuntu version $TOOL_UBUNTU_VERSION"
     exit 0
