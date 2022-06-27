@@ -2,7 +2,7 @@
 
 SCRIPT_DIR=$(readlink -f "$(dirname "$0")")
 source /etc/lsb-release
-TOOL_UBUNTU_VERSION=`cat ./ansible/playbook.yml | grep ubuntu | sed -e 's/.*\([0-9][0-9].[0-9][0-9]\).*/\1/g'`
+TOOL_UBUNTU_VERSION=`cat ./ansible/playbook.yml | grep ubuntu | sed -e 's/[^0-9.]*\([0-9.]*\).*/\1/g'`
 
 if [[ ! $DISTRIB_RELEASE =~ $TOOL_UBUNTU_VERSION ]] ; then
     echo "exit : ubuntu version is invalid"
