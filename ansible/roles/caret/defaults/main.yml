@@ -3,3 +3,4 @@ targeted_skip_keys: console_bridge fastcdr fastrtps rti-connext-dds-5.3.1 urdfdo
 setenv_caret_script_template: setenv_caret.bash.jinja2
 caret_topic_filter_template: caret_topic_filter.bash.jinja2
 ubuntu_version: 20.04
+requirements_path: requirements.txt
