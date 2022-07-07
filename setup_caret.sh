@@ -1,6 +1,14 @@
 #!/bin/bash
 
 SCRIPT_DIR=$(readlink -f "$(dirname "$0")")
+source /etc/lsb-release
+TOOL_UBUNTU_VERSION=`grep -e 'ubuntu_version' ./ansible/playbook.yml | sed -E 's/[^0-9\.]*([0-9\.]*).*/\1/g'`
+
+if [[ ! $DISTRIB_RELEASE =~ $TOOL_UBUNTU_VERSION ]] ; then
+    echo "This script is served for Ubuntu ${DISTRIB_RELEASE}"
+    echo "Run this script on Ubuntu ${TOOL_UBUNTU_VERSION}"
+    exit 0
+fi
 
 # Parse args
 noninteractive=0
