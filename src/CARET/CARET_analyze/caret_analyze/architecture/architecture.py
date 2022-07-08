@@ -174,11 +174,18 @@ class Architecture(Summarizable):
             self._nodes, self._communications, node_filter, communication_filter)
         return path_searcher.search(node_names, max_node_depth)
     
-    def rename(self, file_path: str, renaming_name: str, renamed_name: str):
+    def rename_node(self, file_path: str, renaming_name: str, renamed_name: str):
         for node in self._nodes:
             if node._node_name == renaming_name:
-                print(node.node_name)
+                print("rename_node: "+node.node_name)
                 node._node_name = renamed_name
+
+                for cb in node.callbacks:
+                    print("rename_callback: "+cb._callback_name)
+                    cb._callback_name = cb._callback_name.replace(renaming_name, renamed_name)
+                for cb_group in node.callback_groups:
+                    print("rename_callback_group: "+cb_group._callback_group_name)
+                    cb_group._callback_group_name = cb_group._callback_group_name.replace(renaming_name, renamed_name)
 
         self.export(file_path, True)
 
