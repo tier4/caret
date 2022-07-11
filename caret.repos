@@ -18,12 +18,15 @@ repositories:
   CARET/CARET_analyze:
     type: git
     url: https://github.com/tier4/CARET_analyze.git
-    version: rc/v0.2.2  # use v0.2, since trace points are compatible to caret v0.2
+    version: main  # use main to apply latest change
+    # version: rc/v0.2.2  # use v0.2, since trace points are compatible to caret v0.2
   CARET/CARET_analyze_cpp_impl:
     type: git
     url: https://github.com/tier4/CARET_analyze_cpp_impl.git
-    version: rc/v0.2.2  # use v0.2, since trace points are compatible to caret v0.2
+    version: main  # use main to apply latest change
+    # version: rc/v0.2.2  # use v0.2, since trace points are compatible to caret v0.2
   CARET/ros2caret:
     type: git
     url: https://github.com/tier4/ros2caret.git
-    version: rc/v0.2.2  # use v0.2, since trace points are compatible to caret v0.2
+    version: main  # use main to apply latest change
+    # version: rc/v0.2.2  # use v0.2, since trace points are compatible to caret v0.2
