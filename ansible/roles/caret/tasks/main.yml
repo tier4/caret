@@ -24,6 +24,24 @@
     rosdep install -y --from-paths src --ignore-src --rosdistro {{ rosdistro }} -y --skip-keys "{{ targeted_skip_keys }}"
   args:
     chdir: "{{ WORKSPACE_ROOT }}"
+  
+- name: caret (install some packages for build)
+  apt:
+    name:
+      - ros-{{ rosdistro }}-osrf-testing-tools-cpp
+      - ros-{{ rosdistro }}-performance-test-fixture
+      - ros-{{ rosdistro }}-mimick-vendor
+      - ros-{{ rosdistro }}-test-msgs
+      - ros-{{ rosdistro }}-cyclonedds
+  become: true
+
+- name: caret (install python module)
+  pip:
+    requirements: "{{ requirements_path }}"
+    executable: pip3
+  become: true
+  args:
+    chdir: "{{ WORKSPACE_ROOT }}"
 
 - name: caret (make symbolic link to rclcpp)
   ansible.builtin.file:

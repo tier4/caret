@@ -6,4 +6,4 @@
     - { role: ros2, rosdistro: humble, tags: [ros2] }
     - { role: ros-tracing, rosdistro: humble, tags: [ros-tracing] }
     - { role: visualizer, tags: [visualizer] }
-    - { role: caret, rosdistro: humble, tags: [caret] }
+    - { role: caret, rosdistro: humble, ubuntu_version: 22.04, tags: [caret] }
