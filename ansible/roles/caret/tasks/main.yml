@@ -24,7 +24,7 @@
     rosdep install -y --from-paths src --ignore-src --rosdistro {{ rosdistro }} -y --skip-keys "{{ targeted_skip_keys }}"
   args:
     chdir: "{{ WORKSPACE_ROOT }}"
-  
+
 - name: caret (install some packages for build)
   apt:
     name:
