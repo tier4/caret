@@ -140,8 +140,8 @@ ${DRYRUN} git checkout -b rc/${TAG_ID}
 # copy caret repos and edit as pointing specific tag and hash.
 ${DRYRUN} cp ${SCRIPT_DIR}/template_caret.repos ${ROOT_DIR}/caret.repos
 ${DRYRUN} sed -i -e "s/ROS_TRACING_HASH/${ROS_TRACING_HASH}/g" ${ROOT_DIR}/caret.repos
-${DRYRUN} sed -i -e "s/ROS_RCLCPP_HASH/${ROS_RCLCPP_HASH}/g" ${ROOT_DIR}/caret.repos
-${DRYRUN} sed -i -e "s/ROS_RCL_HASH/${ROS_RCL_HASH}/g" ${ROOT_DIR}/caret.repos
+${DRYRUN} sed -i -e "s/RCLCPP_HASH/${ROS_RCLCPP_HASH}/g" ${ROOT_DIR}/caret.repos
+${DRYRUN} sed -i -e "s/RCL_HASH/${ROS_RCL_HASH}/g" ${ROOT_DIR}/caret.repos
 ${DRYRUN} sed -i -e "s/CARET_TAG/${TAG_ID}/g" ${ROOT_DIR}/caret.repos
 
 ${DRYRUN} git add ${ROOT_DIR}/caret.repos
