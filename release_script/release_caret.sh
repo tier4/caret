@@ -3,6 +3,7 @@
 # echo usage
 
 function show_usage() {
+    echo "Warning: This script may break your repositories, please be careful to use $0"
     echo "Usage: $0 [-h or --help"
     echo "          [-d or --dry-run]"
     echo "          [-p or --push]"
@@ -19,11 +20,11 @@ function show_usage() {
 
 # get script directory.
 SCRIPT_DIR=$(
-    cd $(dirname "$0") || exit
+    cd "$(dirname "$0")" || exit
     pwd
 )
 ROOT_DIR=$(
-    cd $(dirname "$0") || exit
+    cd "$(dirname "$0")" || exit
     cd ../ || exit
     pwd
 )
@@ -51,11 +52,6 @@ PUSH_REMOTE=
 
 OPTIONS=$(getopt -o hdpt: -l help,dry-run,push,tag: -- "$@")
 
-if [ "$?" != 0 ]; then
-    echo "[Error] Option parsing processing is failed." 1>&2
-    show_usage
-fi
-
 eval set -- "$OPTIONS"
 
 while true; do
@@ -65,7 +61,7 @@ while true; do
         shift
         ;;
     -d | --dry-run)
-        DRYRUN=echo
+        DRYRUN='echo'
         shift
         ;;
     -p | --push)
@@ -97,7 +93,7 @@ fi
 # add tags to caret repositries
 function add_tag_to_caret_repository() {
     echo "enter ${1} ..."
-    cd ${1} || exit
+    cd "${1}" || exit
     ${DRYRUN} git checkout main
     ${DRYRUN} git checkout -b rc/"${2}"
     ${DRYRUN} git tag "${2}"
@@ -105,7 +101,7 @@ function add_tag_to_caret_repository() {
         ${DRYRUN} git push origin rc/"${2}"
         ${DRYRUN} git push origin "${2}"
     fi
-    cd ${ROOT_DIR}
+    cd "${ROOT_DIR}" || exit
     echo "leave ${1} ..."
 }
 
@@ -118,7 +114,7 @@ done
 function get_hash_from_repository() {
     cd "${1}" || exit
     HASH_ID=$(git rev-parse HEAD)
-    cd "${ROOT_DIR}"
+    cd "${ROOT_DIR}" || exit
     echo "${HASH_ID}"
 }
 
@@ -135,23 +131,23 @@ ROS_RCL_PATH="src/ros2/${ROS_RCL_REPOS}"
 ROS_RCL_HASH=$(get_hash_from_repository "${ROOT_DIR}"/${ROS_RCL_PATH})
 
 # checkout caret repository.
-${DRYRUN} git checkout -b rc/${TAG_ID}
+${DRYRUN} git checkout -b rc/"${TAG_ID}"
 
 # copy caret repos and edit as pointing specific tag and hash.
 ${DRYRUN} cp "${SCRIPT_DIR}"/template_caret.repos "${ROOT_DIR}"/caret.repos
-${DRYRUN} sed -i -e "s/ROS_TRACING_HASH/"${ROS_TRACING_HASH}"/g" "${ROOT_DIR}"/caret.repos
+${DRYRUN} sed -i -e "s/ROS_TRACING_HASH/${ROS_TRACING_HASH}/g" "${ROOT_DIR}"/caret.repos
 ${DRYRUN} sed -i -e "s/RCLCPP_HASH/${ROS_RCLCPP_HASH}/g" "${ROOT_DIR}"/caret.repos
 ${DRYRUN} sed -i -e "s/RCL_HASH/${ROS_RCL_HASH}/g" "${ROOT_DIR}"/caret.repos
 ${DRYRUN} sed -i -e "s/CARET_TAG/${TAG_ID}/g" "${ROOT_DIR}"/caret.repos
 
-${DRYRUN} git add ${ROOT_DIR}/caret.repos
+${DRYRUN} git add "${ROOT_DIR}"/caret.repos
 ${DRYRUN} git commit -m "\"release(caret.repos): change version of sub repositories for ${TAG_ID}\""
 
-${DRYRUN} git tag ${TAG_ID}
+${DRYRUN} git tag "${TAG_ID}"
 
 if [ "${PUSH_REMOTE}" == "true" ]; then
     ${DRYRUN} cd "${ROOT_DIR}" || exit
-    ${DRYRUN} git push origin ${TAG_ID}
+    ${DRYRUN} git push origin "${TAG_ID}"
     ${DRYRUN} cd "${SCRIPT_DIR}"
 fi
 
