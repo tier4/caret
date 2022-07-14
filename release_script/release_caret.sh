@@ -147,6 +147,7 @@ ${DRYRUN} git tag "${TAG_ID}"
 
 if [ "${PUSH_REMOTE}" == "true" ]; then
     ${DRYRUN} cd "${ROOT_DIR}" || exit
+    ${DRYRUN} git push origin rc/"${TAG_ID}"
     ${DRYRUN} git push origin "${TAG_ID}"
     ${DRYRUN} cd "${SCRIPT_DIR}"
 fi
