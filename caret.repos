@@ -30,5 +30,5 @@ repositories:
   # Dependency for CI/CD
   CARET/caret_common:
     type: git
-    url: https://github.com/autowarefoundation/caret_common.git
+    url: https://github.com/tier4/caret_common.git
     version: main
