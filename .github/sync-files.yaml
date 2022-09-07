@@ -12,3 +12,7 @@
     - source: .prettierignore
     - source: .prettierrc.yaml
     - source: .yamllint.yaml
+
+- repository: tier4/caret_common
+  files:
+    - source: .cspell.json
