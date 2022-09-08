@@ -2,34 +2,28 @@ repositories:
   ros2/rcl:
     type: git
     url: https://github.com/ros2/rcl.git
-    version: humble
+    version: RCL_HASH
   ros2/rclcpp:
     type: git
     url: https://github.com/tier4/rclcpp.git
-    version: v0.3.0
+    version: RCLCPP_HASH
   ros-tracing/ros2_tracing:
     type: git
     url: https://github.com/tier4/ros2_tracing.git
-    version: v0.3.0
+    version: ROS_TRACING_HASH
   CARET/CARET_trace:
     type: git
     url: https://github.com/tier4/CARET_trace.git
-    version: main
+    version: CARET_TAG
   CARET/CARET_analyze:
     type: git
     url: https://github.com/tier4/CARET_analyze.git
-    version: main
+    version: CARET_TAG
   CARET/CARET_analyze_cpp_impl:
     type: git
     url: https://github.com/tier4/CARET_analyze_cpp_impl.git
-    version: main
+    version: CARET_TAG
   CARET/ros2caret:
     type: git
     url: https://github.com/tier4/ros2caret.git
-    version: main
-  # Dependency for CI/CD
-  CARET/caret_common:
-    type: git
-    url: https://github.com/tier4/caret_common.git
-    version: main
-
+    version: CARET_TAG

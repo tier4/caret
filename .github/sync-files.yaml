@@ -3,6 +3,7 @@
     - source: .github/dependabot.yaml
     - source: .github/workflows/pre-commit.yaml
     - source: .github/workflows/pre-commit-optional.yaml
+    - source: .github/workflows/semantic-pull-request.yaml
     - source: .github/workflows/spell-check-differential.yaml
     - source: .github/workflows/sync-files.yaml
     - source: .markdown-link-check.json
@@ -11,3 +12,7 @@
     - source: .prettierignore
     - source: .prettierrc.yaml
     - source: .yamllint.yaml
+
+- repository: tier4/caret_common
+  files:
+    - source: .cspell.json
