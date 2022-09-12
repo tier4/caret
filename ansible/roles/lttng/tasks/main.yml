@@ -8,7 +8,6 @@
   apt:
     name:
       - lttng-tools
-      - lttng-modules-dkms
       - liblttng-ust-dev
   become: true
 

@@ -34,7 +34,7 @@ CARET (Chain-Aware ROS Evaluation Tool) is one of performance analysis tool dedi
   - Documentation
 - [CARET_demos](https://github.com/tier4/CARET_demos)
   - Demo programs for CARET
-- [rclcpp](https://github.com/tier4/rclcpp/tree/galactic_tracepoint_added)
+- [rclcpp](https://github.com/tier4/rclcpp/tree/v0.3.0)
   - The forked `rclcpp` including CARET-dedicated tracepoints
-- [ros2_tracing](https://github.com/tier4/ros2_tracing/tree/galactic_tracepoint_added)
+- [ros2_tracing](https://github.com/tier4/ros2_tracing/tree/v0.3.0)
   - The forked `ros2_tracing` including definition of CARET-dedicated tracepoints

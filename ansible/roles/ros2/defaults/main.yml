@@ -1,4 +1,4 @@
-rosdistro: galactic
+rosdistro: humble
 package: desktop
 repository: http://packages.ros.org/ros2/ubuntu
 keyserver: https://raw.githubusercontent.com/ros/rosdistro/master/ros.key
