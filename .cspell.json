@@ -1,3 +1,16 @@
 {
-  "words": ["dataframe"]
+  "words": [
+    "binsize",
+    "cpuid",
+    "dataframe",
+    "lsplit",
+    "minc",
+    "Passingvalue",
+    "Recordsinterface",
+    "Summarizable",
+    "Timeseries",
+    "tracepoint",
+    "tracepoints",
+    "varpass"
+  ]
 }
