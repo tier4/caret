@@ -36,7 +36,8 @@ CARET_DIRS_PATH="${ROOT_DIR}/src/CARET"
 CARET_REPOS_ARRAY=("CARET_trace"
     "CARET_analyze"
     "CARET_analyze_cpp_impl"
-    "ros2caret")
+    "ros2caret"
+    "caret_common")
 
 # ros-tracing repository
 ROS_TRACING_REPOS="ros2_tracing"
