@@ -1,5 +1,6 @@
 {
   "words": [
+    "babeltrace",
     "binsize",
     "cpuid",
     "dataframe",
@@ -11,6 +12,7 @@
     "Timeseries",
     "tracepoint",
     "tracepoints",
+    "tracetools",
     "varpass"
   ]
 }
