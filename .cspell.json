@@ -4,6 +4,7 @@
     "binsize",
     "cpuid",
     "dataframe",
+    "Hashable",
     "lsplit",
     "minc",
     "Passingvalue",
