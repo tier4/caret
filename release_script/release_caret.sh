@@ -82,7 +82,7 @@ done
 
 # check options and output messages.
 if [ -z "${TAG_ID}" ]; then
-    echo "tag should be given with options like --tag-id or -t."
+    echo "tag should be given with option --tag or -t."
     exit 1
 fi
 
