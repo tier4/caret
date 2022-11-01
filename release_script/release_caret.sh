@@ -82,7 +82,7 @@ done
 
 # check options and output messages.
 if [ -z "${TAG_ID}" ]; then
-    echo "tag should be given with options like --tag-id or -t."
+    echo "tag should be given with option --tag or -t."
     exit 1
 fi
 
@@ -93,21 +93,23 @@ fi
 
 # add tags to caret repositries
 function add_tag_to_caret_repository() {
-    echo "enter ${1} ..."
-    cd "${1}" || exit
+    DIR_PATH=${CARET_DIRS_PATH}/${1}
+    echo "enter  ${DIR_PATH}..."
+    cd "${DIR_PATH}" || exit
     ${DRYRUN} git checkout main
     ${DRYRUN} git checkout -b rc/"${2}"
     ${DRYRUN} git tag "${2}"
+    ${DRYRUN} git remote add github git@github.com:tier4/"${1}".git
     if [ "${PUSH_REMOTE}" == "true" ]; then
-        ${DRYRUN} git push origin rc/"${2}"
-        ${DRYRUN} git push origin "${2}"
+        ${DRYRUN} git push github rc/"${2}"
+        ${DRYRUN} git push github "${2}"
     fi
     cd "${ROOT_DIR}" || exit
     echo "leave ${1} ..."
 }
 
 for repos in "${CARET_REPOS_ARRAY[@]}"; do
-    add_tag_to_caret_repository "${CARET_DIRS_PATH}/${repos}" "${TAG_ID}"
+    add_tag_to_caret_repository "${repos}" "${TAG_ID}"
 done
 
 # get tags from repository
