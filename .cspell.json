@@ -14,6 +14,16 @@
     "tracepoint",
     "tracepoints",
     "tracetools",
-    "varpass"
+    "varpass",
+    "NEDO",
+    "sched",
+    "DBUILD",
+    "libcaret",
+    "LSTRIP",
+    "RSTRIP",
+    "YYYYMMDD",
+    "HHMMSS",
+    "Callbackgroup",
+    "simtime"
   ]
 }
