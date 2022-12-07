@@ -2,7 +2,6 @@ name: Question
 description: Ask a general question
 labels: [question]
 body:
-
   - type: checkboxes
     attributes:
       label: Checklist

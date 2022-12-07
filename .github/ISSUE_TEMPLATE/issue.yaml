@@ -2,7 +2,6 @@ name: Issue
 description: Report a bug/issue
 labels: [bug]
 body:
-
   - type: checkboxes
     attributes:
       label: Checklist
@@ -56,11 +55,11 @@ body:
           - **CPU**: Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz x 12
           - **Memory**: 32.0 GiB
       placeholder: |
-          - OS:
-          - Kernel version:
-          - ROS 2:
-          - CPU:
-          - Memory:
+        - OS:
+        - Kernel version:
+        - ROS 2:
+        - CPU:
+        - Memory:
     validations:
       required: true
 
