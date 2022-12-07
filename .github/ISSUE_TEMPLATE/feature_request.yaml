@@ -1,0 +1,40 @@
+name: Feature request
+description: Suggest an idea for this project
+labels: [enhancement]
+body:
+
+  - type: checkboxes
+    attributes:
+      label: Checklist
+      description: Confirm the following items before proceeding.
+      options:
+        - label: I've read the [contribution guidelines](https://github.com/tier4/caret/blob/main/.github/CONTRIBUTING.md).
+          required: true
+        - label: I've searched other issues and no duplicate issues were found.
+          required: true
+        - label: I've read [document](https://tier4.github.io/CARET_doc/main/) and no solution were found.
+          required: true
+
+  - type: dropdown
+    id: step
+    attributes:
+      label: Step where the feature is related to
+      description: Which step is the feature related to?
+      multiple: true
+      options:
+        - Setup
+        - Build
+        - Recording
+        - Visualization
+        - Documentation
+        - Others
+    validations:
+      required: true
+
+  - type: textarea
+    id: feature_description
+    attributes:
+      label: Description
+      description: Describe the feature.
+    validations:
+      required: true
