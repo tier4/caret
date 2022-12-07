@@ -115,6 +115,14 @@ body:
       required: false
 
   - type: textarea
+    id: lttng_trace_log_file
+    attributes:
+      label: LTTng trace log file
+      description: If applicable, add LTTng trace log file stored in '~/.ros/tracing/'
+    validations:
+      required: false
+
+  - type: textarea
     id: screenshots
     attributes:
       label: Screenshots
