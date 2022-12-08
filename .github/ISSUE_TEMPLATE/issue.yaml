@@ -64,6 +64,23 @@ body:
       required: true
 
   - type: textarea
+    id: caret_version
+    attributes:
+      label: CARET version
+      description: |
+        Write CARET version. If you use main branch, please give us hash id of CARET_analyze and CARET_trace you used.
+        Examples:
+          - **CARET**: v0.3.3
+          - **CARET_analyze**: a69abae9fa2a8270fa855356815d650d27cfb323
+          - **CARET_trace**: 38f5cc4f35cc15b9a3499125851819ea78fe37c1
+      placeholder: |
+        - CARET:
+        - CARET_analyze:
+        - CARET_trace:
+    validations:
+      required: true
+
+  - type: textarea
     id: target_application
     attributes:
       label: Target application
@@ -75,7 +92,7 @@ body:
         - How to run: Rosbag replay simulation
           - https://autowarefoundation.github.io/autoware-documentation/main/tutorials/ad-hoc-simulation/rosbag-replay-simulation/
     validations:
-      required: true
+      required: false
 
   - type: textarea
     id: issue_description
@@ -100,7 +117,7 @@ body:
     id: commands
     attributes:
       label: Commands
-      description: Copy and paste commands to reproduce the issue. You can omit this if you 'Steps to reproduce' includes it.
+      description: Copy and paste commands to reproduce the issue. You can omit this if 'Steps to reproduce' includes it.
       render: shell
     validations:
       required: false
@@ -109,7 +126,7 @@ body:
     id: logs
     attributes:
       label: Logs
-      description: Copy and paste any relevant log output.
+      description: Copy and paste any relevant log output. If the issue is related to recording or visualization, please add the result of `check_ctf` command. If the issue is related to path visualization, please add the result of `path.verify`.
       render: shell
     validations:
       required: false
@@ -118,7 +135,7 @@ body:
     id: lttng_trace_log_file
     attributes:
       label: LTTng trace log file
-      description: If applicable, add LTTng trace log file stored in '~/.ros/tracing/'
+      description: If applicable, add LTTng trace log file stored in `~/.ros/tracing/`
     validations:
       required: false
 

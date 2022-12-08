@@ -26,6 +26,7 @@ The PR reviewers **must** check the checkboxes below before approval.
 
 The PR author **must** check the checkboxes below before merging.
 
+- [ ] (Optional) The PR has been properly tested with CARET_report verification.
 - [ ] There are no open discussions or they are tracked via tickets.
 - [ ] The PR is ready for merge.
 
