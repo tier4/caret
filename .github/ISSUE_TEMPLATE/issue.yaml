@@ -9,8 +9,6 @@ body:
       options:
         - label: I've read the [contribution guidelines](https://github.com/tier4/caret/blob/main/.github/CONTRIBUTING.md).
           required: true
-        - label: I've searched other issues and no duplicate issues were found.
-          required: true
         - label: I've read [document](https://tier4.github.io/CARET_doc/main/) and no solution were found.
           required: true
 
