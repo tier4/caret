@@ -1,0 +1,148 @@
+name: Issue
+description: Report a bug/issue
+labels: [bug]
+body:
+  - type: checkboxes
+    attributes:
+      label: Checklist
+      description: Confirm the following items before proceeding.
+      options:
+        - label: I've read the [contribution guidelines](https://github.com/tier4/caret/blob/main/.github/CONTRIBUTING.md).
+          required: true
+        - label: I've read [document](https://tier4.github.io/CARET_doc/main/) and no solution were found.
+          required: true
+
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Issue type
+      description: What type of issue would you like to report?
+      multiple: false
+      options:
+        - Bug
+        - Help wanted
+        - Others
+    validations:
+      required: true
+
+  - type: dropdown
+    id: step
+    attributes:
+      label: Step where the issue is related to
+      description: Which step is the issue related to?
+      multiple: true
+      options:
+        - Setup
+        - Build
+        - Recording
+        - Visualization
+        - Documentation
+        - Others
+    validations:
+      required: true
+
+  - type: textarea
+    id: environments
+    attributes:
+      label: Environments
+      description: |
+        Examples:
+          - **OS**: Ubuntu 22.04.1 LTS
+          - **Kernel version**: 5.14.0-1052-oem
+          - **ROS 2**: Humble
+          - **CPU**: Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz x 12
+          - **Memory**: 32.0 GiB
+      placeholder: |
+        - OS:
+        - Kernel version:
+        - ROS 2:
+        - CPU:
+        - Memory:
+    validations:
+      required: true
+
+  - type: textarea
+    id: caret_version
+    attributes:
+      label: CARET version
+      description: |
+        Write CARET version. If you use main branch, please give us hash id of CARET_analyze and CARET_trace you used.
+        Examples:
+          - **CARET**: v0.3.3
+          - **CARET_analyze**: a69abae9fa2a8270fa855356815d650d27cfb323
+          - **CARET_trace**: 38f5cc4f35cc15b9a3499125851819ea78fe37c1
+      placeholder: |
+        - CARET:
+        - CARET_analyze:
+        - CARET_trace:
+    validations:
+      required: true
+
+  - type: textarea
+    id: target_application
+    attributes:
+      label: Target application
+      description: Describe the target application.
+      placeholder: |-
+        - Application name: Autoware
+        - URL: https://github.com/autowarefoundation/autoware
+        - Version: main branch at 2022/12/07
+        - How to run: Rosbag replay simulation
+          - https://autowarefoundation.github.io/autoware-documentation/main/tutorials/ad-hoc-simulation/rosbag-replay-simulation/
+    validations:
+      required: false
+
+  - type: textarea
+    id: issue_description
+    attributes:
+      label: Description
+      description: Describe the issue and expected behavior.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Steps to reproduce
+      description: Write the steps to reproduce the issue.
+      placeholder: |-
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: commands
+    attributes:
+      label: Commands
+      description: Copy and paste commands to reproduce the issue. You can omit this if 'Steps to reproduce' includes it.
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Copy and paste any relevant log output. If the issue is related to recording or visualization, please add the result of `check_ctf` command. If the issue is related to path visualization, please add the result of `path.verify`.
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: lttng_trace_log_file
+    attributes:
+      label: LTTng trace log file
+      description: If applicable, add LTTng trace log file stored in `~/.ros/tracing/`
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots to help explain your problem.
+      placeholder: |-
+        ![DESCRIPTION](LINK.png)
+    validations:
+      required: false
