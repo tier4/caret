@@ -16,12 +16,12 @@
   become: true
 
 - name: ROS2 (update rosdep)
-  command: rosdep update
+  command: rosdep update --include-eol-distros
   become: false
 
 - name: caret (rosdep install dependencies)
   shell: |
-    rosdep install -y --from-paths src --ignore-src --rosdistro {{ rosdistro }} -y --skip-keys "{{ targeted_skip_keys }}"
+    rosdep install -y -v --from-paths src --ignore-src --rosdistro {{ rosdistro }} -y --skip-keys "{{ targeted_skip_keys }}"
   args:
     chdir: "{{ WORKSPACE_ROOT }}"
 
