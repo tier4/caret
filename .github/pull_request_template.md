@@ -12,7 +12,7 @@
 
 ## Pre-review checklist for the PR author
 
-- [ ] I've confirmed the [contribution guidelines].
+- [ ] I've confirmed the [contribution guidelines](https://github.com/tier4/caret/blob/main/.github/CONTRIBUTING.md).
 - [ ] The PR is ready for review.
 
 ## In-review checklist for the PR reviewers
