@@ -7,7 +7,7 @@ source {{ WORKSPACE_ROOT }}/caret_topic_filter.bash
 export LD_PRELOAD=$(readlink -f {{ WORKSPACE_ROOT}}/install/caret_trace/lib/libcaret.so)
 
 # If you want to apply CARET to a large application,
-# it is recommended to increase the maximum number of 
+# it is recommended to increase the maximum number of
 # file descriptors to avoid data loss.
 # Execute ulimit command as below.
 # ulimit -n 16384
