@@ -14,10 +14,13 @@ CARET (Chain-Aware ROS Evaluation Tool) is one of performance analysis tool dedi
 </div>
 
 ## Publications & presentations
-If you find CARET is useful in your research, please consider citing:
-* T. Kuboichi, A. Hasegawa, B. Peng, K. Miura, K. Funaoka, S. Kato, and T. Azumi, "CARET: Chain-Aware ROS 2 Evaluation Tool," *IEEE international conference on Embedded and Ubiquitous Computing (EUC)*, 2022.
 
-* B. Peng, A. Hasegawa, and T. Azumi, "Scheduling Performance Evaluation Framework for ROS 2 Applications," *IEEE International Conference on Embedded Software and Systems (ICESS)*, 2022.
+If you find CARET is useful in your research, please consider citing:
+
+- T. Kuboichi, A. Hasegawa, B. Peng, K. Miura, K. Funaoka, S. Kato, and T. Azumi, "CARET: Chain-Aware ROS 2 Evaluation Tool," _IEEE international conference on Embedded and Ubiquitous Computing (EUC)_, 2022.
+
+- B. Peng, A. Hasegawa, and T. Azumi, "Scheduling Performance Evaluation Framework for ROS 2 Applications," _IEEE International Conference on Embedded Software and Systems (ICESS)_, 2022.
+
 <details>
 <summary>BibTeX</summary>
 
@@ -28,6 +31,7 @@ author={Kuboichi, Takahisa and Hasegawa, Atsushi and Peng, Bo and Miura, Keita a
 booktitle={Proceedings of IEEE international conference on embedded and ubiquitous computing (EUC)},
 year={2022}}
 ```
+
 ```bibtex
 @inproceedings{callback_scheduling,
 title={Scheduling Performance Evaluation Framework for {ROS} 2 Applications},
@@ -35,6 +39,7 @@ author={Peng, Bo and Hasegawa, Atsushi and Azumi, Takuya},
 booktitle={Proceedings of IEEE International Conference on Embedded Software and Systems (ICESS)},
 year={2022}}
 ```
+
 </details>
 
 ## Documentation
