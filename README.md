@@ -12,6 +12,7 @@ CARET (Chain-Aware ROS Evaluation Tool) is one of performance analysis tool dedi
 <div align="center">
     <img src="https://user-images.githubusercontent.com/105265012/182009138-bb9892c6-fa66-488c-bbb2-631df170fcf7.png" alt="overview">
 </div>
+
 ## Publications & presentations
 If you find CARET is useful in your research, please consider citing:
 * T. Kuboichi, A. Hasegawa, B. Peng, K. Miura, K. Funaoka, S. Kato, and T. Azumi, "CARET: Chain-Aware ROS 2 Evaluation Tool," *IEEE international conference on Embedded and Ubiquitous Computing (EUC)*, 2022.
@@ -35,6 +36,7 @@ booktitle={Proceedings of IEEE International Conference on Embedded Software and
 year={2022}}
 ```
 </details>
+
 ## Documentation
 
 - To learn about using CARET, refer to the [CARET document](https://tier4.github.io/CARET_doc/main/)
