@@ -42,6 +42,8 @@ year={2022}}
 
 </details>
 
+Also, check out ROSCON 2022 presentation titled "Chain-Aware ROS Evaluation Tool (CARET)" ([video](https://vimeo.com/showcase/9954564/video/767150288), [slide](http://download.ros.org/downloads/roscon/2022/Chain-Aware%20ROS%20Evaluation%20Tool%20(CARET).pdf)).
+
 ## Documentation
 
 - To learn about using CARET, refer to the [CARET document](https://tier4.github.io/CARET_doc/main/)
