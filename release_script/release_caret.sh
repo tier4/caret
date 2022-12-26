@@ -59,7 +59,6 @@ while true; do
     case $1 in
     -h | --help)
         show_usage
-        shift
         ;;
     -d | --dry-run)
         DRYRUN='echo'
