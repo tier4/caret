@@ -47,10 +47,11 @@ ROS_RCLCPP_REPOS="rclcpp"
 ROS_RCL_REPOS="rcl"
 
 # variables
-DRYRUN=
+DRY_RUN=
 TAG_ID=
 PUSH_REMOTE=
 
+# cspell:disable-next-line
 OPTIONS=$(getopt -o hdpt: -l help,dry-run,push,tag: -- "$@")
 
 eval set -- "$OPTIONS"
@@ -59,10 +60,9 @@ while true; do
     case $1 in
     -h | --help)
         show_usage
-        shift
         ;;
     -d | --dry-run)
-        DRYRUN='echo'
+        DRY_RUN='echo'
         shift
         ;;
     -p | --push)
@@ -86,23 +86,23 @@ if [ -z "${TAG_ID}" ]; then
     exit 1
 fi
 
-if [ "${DRYRUN}" == "echo" ]; then
-    ${DRYRUN} "This program will run by dry-run mode."
-    ${DRYRUN} "TAG ID: ${TAG_ID}"
+if [ "${DRY_RUN}" == "echo" ]; then
+    ${DRY_RUN} "This program will run by dry-run mode."
+    ${DRY_RUN} "TAG ID: ${TAG_ID}"
 fi
 
-# add tags to caret repositries
+# add tags to caret repositories
 function add_tag_to_caret_repository() {
     DIR_PATH=${CARET_DIRS_PATH}/${1}
     echo "enter  ${DIR_PATH}..."
     cd "${DIR_PATH}" || exit
-    ${DRYRUN} git checkout main
-    ${DRYRUN} git checkout -b rc/"${2}"
-    ${DRYRUN} git tag "${2}"
-    ${DRYRUN} git remote add github git@github.com:tier4/"${1}".git
+    ${DRY_RUN} git checkout main
+    ${DRY_RUN} git checkout -b rc/"${2}"
+    ${DRY_RUN} git tag "${2}"
+    ${DRY_RUN} git remote add github git@github.com:tier4/"${1}".git
     if [ "${PUSH_REMOTE}" == "true" ]; then
-        ${DRYRUN} git push github rc/"${2}"
-        ${DRYRUN} git push github "${2}"
+        ${DRY_RUN} git push github rc/"${2}"
+        ${DRY_RUN} git push github "${2}"
     fi
     cd "${ROOT_DIR}" || exit
     echo "leave ${1} ..."
@@ -134,25 +134,25 @@ ROS_RCL_PATH="src/ros2/${ROS_RCL_REPOS}"
 ROS_RCL_HASH=$(get_hash_from_repository "${ROOT_DIR}"/${ROS_RCL_PATH})
 
 # checkout caret repository.
-${DRYRUN} git checkout -b rc/"${TAG_ID}"
+${DRY_RUN} git checkout -b rc/"${TAG_ID}"
 
 # copy caret repos and edit as pointing specific tag and hash.
-${DRYRUN} cp "${SCRIPT_DIR}"/template_caret.repos "${ROOT_DIR}"/caret.repos
-${DRYRUN} sed -i -e "s/ROS_TRACING_HASH/${ROS_TRACING_HASH}/g" "${ROOT_DIR}"/caret.repos
-${DRYRUN} sed -i -e "s/RCLCPP_HASH/${ROS_RCLCPP_HASH}/g" "${ROOT_DIR}"/caret.repos
-${DRYRUN} sed -i -e "s/RCL_HASH/${ROS_RCL_HASH}/g" "${ROOT_DIR}"/caret.repos
-${DRYRUN} sed -i -e "s/CARET_TAG/${TAG_ID}/g" "${ROOT_DIR}"/caret.repos
+${DRY_RUN} cp "${SCRIPT_DIR}"/template_caret.repos "${ROOT_DIR}"/caret.repos
+${DRY_RUN} sed -i -e "s/ROS_TRACING_HASH/${ROS_TRACING_HASH}/g" "${ROOT_DIR}"/caret.repos
+${DRY_RUN} sed -i -e "s/RCLCPP_HASH/${ROS_RCLCPP_HASH}/g" "${ROOT_DIR}"/caret.repos
+${DRY_RUN} sed -i -e "s/RCL_HASH/${ROS_RCL_HASH}/g" "${ROOT_DIR}"/caret.repos
+${DRY_RUN} sed -i -e "s/CARET_TAG/${TAG_ID}/g" "${ROOT_DIR}"/caret.repos
 
-${DRYRUN} git add "${ROOT_DIR}"/caret.repos
-${DRYRUN} git commit -m "\"release(caret.repos): change version of sub repositories for ${TAG_ID}\""
+${DRY_RUN} git add "${ROOT_DIR}"/caret.repos
+${DRY_RUN} git commit -m "\"release(caret.repos): change version of sub repositories for ${TAG_ID}\""
 
-${DRYRUN} git tag "${TAG_ID}"
+${DRY_RUN} git tag "${TAG_ID}"
 
 if [ "${PUSH_REMOTE}" == "true" ]; then
-    ${DRYRUN} cd "${ROOT_DIR}" || exit
-    ${DRYRUN} git push origin rc/"${TAG_ID}"
-    ${DRYRUN} git push origin "${TAG_ID}"
-    ${DRYRUN} cd "${SCRIPT_DIR}"
+    ${DRY_RUN} cd "${ROOT_DIR}" || exit
+    ${DRY_RUN} git push origin rc/"${TAG_ID}"
+    ${DRY_RUN} git push origin "${TAG_ID}"
+    ${DRY_RUN} cd "${SCRIPT_DIR}"
 fi
 
 echo "[Info] Completed release script."
