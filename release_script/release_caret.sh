@@ -91,7 +91,7 @@ if [ "${DRY_RUN}" == "echo" ]; then
     ${DRY_RUN} "TAG ID: ${TAG_ID}"
 fi
 
-# add tags to caret repositries
+# add tags to caret repositories
 function add_tag_to_caret_repository() {
     DIR_PATH=${CARET_DIRS_PATH}/${1}
     echo "enter  ${DIR_PATH}..."
@@ -144,7 +144,7 @@ ${DRY_RUN} sed -i -e "s/RCL_HASH/${ROS_RCL_HASH}/g" "${ROOT_DIR}"/caret.repos
 ${DRY_RUN} sed -i -e "s/CARET_TAG/${TAG_ID}/g" "${ROOT_DIR}"/caret.repos
 
 ${DRY_RUN} git add "${ROOT_DIR}"/caret.repos
-${DRY_RUN} git commit -m "\"release(caret.repos): change version of sub repository for ${TAG_ID}\""
+${DRY_RUN} git commit -m "\"release(caret.repos): change version of sub repositories for ${TAG_ID}\""
 
 ${DRY_RUN} git tag "${TAG_ID}"
 
