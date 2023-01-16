@@ -66,3 +66,9 @@ RUN cd autoware && \
     . /opt/ros/"$ROS_DISTRO"/setup.sh && \
     . /ros2_caret_ws/install/local_setup.sh && \
     colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=Off
+
+RUN echo "===== Verify Build ====="
+RUN cd autoware && \
+    . /opt/ros/"$ROS_DISTRO"/setup.sh && \
+    . /ros2_caret_ws/install/local_setup.sh && \
+    ros2 caret check_caret_rclcpp --workspace ./
