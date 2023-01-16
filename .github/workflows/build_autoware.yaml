@@ -3,7 +3,7 @@ name: Build with Autoware
 on:
   schedule:
     - cron: 0 17 * * * # run at 2 AM JST
-  pull_request:
+  # pull_request:
   workflow_dispatch:
 
 jobs:

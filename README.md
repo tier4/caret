@@ -4,6 +4,8 @@
 
 [![build-and-test](https://github.com/tier4/CARET_trace/actions/workflows/build-and-test.yaml/badge.svg)](https://github.com/tier4/CARET_trace/actions/workflows/build-and-test.yaml)
 [![pytest](https://github.com/tier4/CARET_analyze/actions/workflows/pytest.yaml/badge.svg)](https://github.com/tier4/CARET_analyze/actions/workflows/pytest.yaml)
+[![Build with Autoware](https://github.com/tier4/caret/actions/workflows/build_autoware.yaml/badge.svg)](https://github.com/tier4/caret/actions/workflows/build_autoware.yaml)
+[![Test with Autoware](https://github.com/tier4/CARET_report/actions/workflows/test_autoware.yaml/badge.svg)](https://github.com/tier4/CARET_report/actions/workflows/test_autoware.yaml)
 
 # CARET
 
