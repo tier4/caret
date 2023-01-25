@@ -10,13 +10,13 @@ function show_usage() {
     echo "    -h or --help: show help message"
     echo "    -c or --no-interactive"
     echo "    -n or --no-package-install"
-    exit 0;
+    exit 0
 }
 
 # parse command options.
-OPT=`getopt -o nch -l no-interactive,no-package-install,help -- "$@"`
+OPT=$(getopt -o nch -l no-interactive,no-package-install,help -- "$@")
 
-if [ $? != 0 ] ; then
+if [ $? != 0 ]; then
     echo "[Error] Option parsing processing is failed." 1>&2
     show_usage
     exit 1
@@ -28,14 +28,12 @@ eval set -- "$OPT"
 noninteractive=0
 package_install=1
 
-
 echo $1
 
-while true
-do
+while true; do
     case $1 in
     -h | --help)
-        show_usage;
+        show_usage
         shift
         ;;
     -c | --no-interactive)
@@ -52,7 +50,6 @@ do
         ;;
     esac
 done
-
 
 # Confirm whether to start installation
 if [ $noninteractive -eq 0 ]; then
@@ -71,7 +68,7 @@ if [ $noninteractive -eq 0 ]; then
         exit 1
     fi
 else
-     echo -e "\e[36mRun the setup in non-interactive mode.\e[m"   
+    echo -e "\e[36mRun the setup in non-interactive mode.\e[m"
 fi
 
 # Install sudo
