@@ -16,11 +16,6 @@ function show_usage() {
 # parse command options.
 OPT=$(getopt -o nch -l no-interactive,no-package-install,help -- "$@")
 
-if [ $? != 0 ]; then
-    echo "[Error] Option parsing processing is failed." 1>&2
-    show_usage
-fi
-
 eval set -- "$OPT"
 
 # Parse args
