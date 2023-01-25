@@ -2,16 +2,7 @@
 
 set -Ceu
 
-
 SCRIPT_DIR=$(readlink -f "$(dirname "$0")")
-DISTRIB_RELEASE=$(grep -e "DISTRIB_RELEASE=" /etc/lsb-release | sed -e "s/DISTRIB_RELEASE=//g")
-TOOL_UBUNTU_VERSION=$(grep -e 'ubuntu_version' ./ansible/playbook.yml | sed -E 's/[^0-9\.]*([0-9\.]*).*/\1/g')
-
-if [[ ! $DISTRIB_RELEASE =~ $TOOL_UBUNTU_VERSION ]]; then
-    echo "This script is served for Ubuntu ${DISTRIB_RELEASE}"
-    echo "Run this script on Ubuntu ${TOOL_UBUNTU_VERSION}"
-    exit 0
-fi
 
 function show_usage() {
     echo "${0} executes setup for CARET."
