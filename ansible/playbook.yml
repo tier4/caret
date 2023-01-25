@@ -3,8 +3,8 @@
   become: false
   vars_prompt:
     - name: package_install
-      prompt: "Would you like to install the require packages[y/n]"
-      default: "y"
+      prompt: Would you like to install the require packages[y/n]
+      default: y
       private: false
   pre_tasks:
     - name: Verify OS

@@ -19,7 +19,6 @@ OPT=$(getopt -o nch -l no-interactive,no-package-install,help -- "$@")
 if [ $? != 0 ]; then
     echo "[Error] Option parsing processing is failed." 1>&2
     show_usage
-    exit 1
 fi
 
 eval set -- "$OPT"
@@ -28,13 +27,10 @@ eval set -- "$OPT"
 noninteractive=0
 package_install=1
 
-echo $1
-
 while true; do
     case $1 in
     -h | --help)
         show_usage
-        shift
         ;;
     -c | --no-interactive)
         noninteractive=1
