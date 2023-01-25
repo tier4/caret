@@ -14,7 +14,6 @@
 
   roles:
     - { role: lttng, tags: [lttng], when: package_install == 'y' }
-    - { role: ros2, rosdistro: humble, tags: [ros2], when: package_install == 'y' }
     - { role: ros-tracing, rosdistro: humble, tags: [ros-tracing], when: package_install == 'y' }
     - { role: visualizer, tags: [visualizer], when: package_install == 'y' }
     - { role: caret, rosdistro: humble, tags: [caret] }
