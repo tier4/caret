@@ -65,7 +65,7 @@ RUN echo "===== Build Autoware ====="
 RUN cd autoware && \
     . /opt/ros/"$ROS_DISTRO"/setup.sh && \
     . /ros2_caret_ws/install/local_setup.sh && \
-    colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=Off
+    colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=Off -DCMAKE_CXX_FLAGS="-w"
 
 RUN echo "===== Verify Build ====="
 RUN cd autoware && \
