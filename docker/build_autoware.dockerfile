@@ -33,6 +33,7 @@ RUN echo "===== Setup Autoware ====="
 RUN git clone https://github.com/autowarefoundation/autoware.git && \
     cd autoware && \
     git checkout "$AUTOWARE_VERSION" && \
+    DEBIAN_FRONTEND=noninteractive apt install python3.10-venv -y && \
     ./setup-dev-env.sh -y --no-nvidia --no-cuda-drivers && \
     mkdir src && \
     vcs import src < autoware.repos && \
