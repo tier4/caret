@@ -15,10 +15,15 @@ ENV LANG en_US.UTF-8
 # Do not use cache
 ADD "https://www.random.org/sequences/?min=1&max=52&col=1&format=plain&rnd=new" /dev/null
 
+RUN echo "===== GET CARET ====="
+# RUN git clone https://github.com/tier4/caret.git ros2_caret_ws && \
+#     cd ros2_caret_ws && \
+#     git checkout "$CARET_VERSION"
+COPY ./ /ros2_caret_ws
+
 RUN echo "===== Setup CARET ====="
-RUN git clone https://github.com/tier4/caret.git ros2_caret_ws && \
-    cd ros2_caret_ws && \
-    git checkout "$CARET_VERSION" && \
+RUN cd ros2_caret_ws && \
+    rm -rf src build log install && \
     mkdir src && \
     vcs import src < caret.repos && \
     . /opt/ros/"$ROS_DISTRO"/setup.sh && \
