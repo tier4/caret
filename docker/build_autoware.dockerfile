@@ -61,11 +61,17 @@ RUN cd /opt/ros/humble/share/ament_cmake_auto/cmake && \
     sed -i -e 's/SYSTEM//g' ament_auto_add_executable.cmake && \
     sed -i -e 's/SYSTEM//g' ament_auto_add_library.cmake
 
-RUN echo "===== Modify pcl_ros as workaround ====="
+RUN echo "===== Modify pcl_ros (libtracetools.so) as workaround ====="
 RUN cd /opt/ros/humble/share/pcl_ros/cmake && \
     backup_date="`date +"%Y%m%d_%H%M%S"`" && \
     cp export_pcl_rosExport.cmake export_pcl_rosExport.cmake_"$backup_date" && \
     sed -i -e 's/\/opt\/ros\/humble\/lib\/libtracetools.so;//g' export_pcl_rosExport.cmake
+
+RUN echo "===== Modify pcl_ros (rclcpp) as workaround ====="
+RUN cd /opt/ros/humble/share/pcl_ros/cmake && \
+    backup_date="`date +"%Y%m%d_%H%M%S"`" && \
+    cp export_pcl_rosExport.cmake export_pcl_rosExport.cmake_"$backup_date"_2 && \
+    sed -i -e 's/\/opt\/ros\/humble\/include\/rclcpp;//g' export_pcl_rosExport.cmake
 
 RUN echo "===== Build Autoware ====="
 RUN cd autoware && \
