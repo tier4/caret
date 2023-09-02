@@ -18,7 +18,7 @@ repositories:
   CARET/CARET_analyze:
     type: git
     url: https://github.com/tier4/CARET_analyze.git
-    version: v0.4.14
+    version: rc/v0.4.14_fix_pandas_version
   CARET/CARET_analyze_cpp_impl:
     type: git
     url: https://github.com/tier4/CARET_analyze_cpp_impl.git
