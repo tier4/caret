@@ -6,7 +6,7 @@ repositories:
   ros2/rclcpp:
     type: git
     url: https://github.com/tier4/rclcpp.git
-    version: 58a5228b0cfe3194bbe0c265fb949f6ec511df21
+    version: humble-with-fix-service-connection-patch-tracepoint-added
   ros-tracing/ros2_tracing:
     type: git
     url: https://github.com/tier4/ros2_tracing.git
@@ -18,7 +18,7 @@ repositories:
   CARET/CARET_analyze:
     type: git
     url: https://github.com/tier4/CARET_analyze.git
-    version: v0.4.15
+    version: 4102a3381bff197a439404ca84f2c5918574e4a2
   CARET/CARET_analyze_cpp_impl:
     type: git
     url: https://github.com/tier4/CARET_analyze_cpp_impl.git
