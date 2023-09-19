@@ -1,0 +1,2 @@
+- name: cyclonedds (Disable description to hide symbols)
+  command: sed -i "s/^set_property(TARGET ddsc PROPERTY C_VISIBILITY_PRESET hidden)/\# &/" "{{ WORKSPACE_ROOT }}"/src/eclipse-cyclonedds/cyclonedds/src/core/CMakeLists.txt
