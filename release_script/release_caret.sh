@@ -151,7 +151,6 @@ ${DRY_RUN} sed -i -e "s/RCL_HASH/${ROS_RCL_HASH}/g" "${ROOT_DIR}"/caret.repos
 ${DRY_RUN} sed -i -e "s/CYCLONEDDS_HASH/${CYCLONEDDS_HASH}/g" "${ROOT_DIR}"/caret.repos
 ${DRY_RUN} sed -i -e "s/CARET_TAG/${TAG_ID}/g" "${ROOT_DIR}"/caret.repos
 
-
 ${DRY_RUN} git add "${ROOT_DIR}"/caret.repos
 ${DRY_RUN} git commit -m "release(caret.repos): change version of sub repositories for ${TAG_ID}"
 
