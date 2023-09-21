@@ -31,3 +31,7 @@ repositories:
     type: git
     url: https://github.com/tier4/caret_common.git
     version: v0.4.16.1
+  eclipse-cyclonedds/cyclonedds:
+    type: git
+    url: https://github.com/eclipse-cyclonedds/cyclonedds.git
+    version: releases/0.10.x
