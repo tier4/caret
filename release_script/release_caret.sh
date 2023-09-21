@@ -138,7 +138,7 @@ ROS_RCL_HASH=$(get_hash_from_repository "${ROOT_DIR}"/${ROS_RCL_PATH})
 
 # get hash number from cyclonedds
 CYCLONEDDS_PATH="src/eclipse-cyclonedds/${CYCLONEDDS_REPOS}"
-CYCLONEDDS_HASH=$(get_hash_from_repository "${ROOT_DIR}"/${CYCLONEDDS_REPOS})
+CYCLONEDDS_HASH=$(get_hash_from_repository "${ROOT_DIR}"/${CYCLONEDDS_PATH})
 
 # checkout caret repository.
 ${DRY_RUN} git checkout -b rc/"${TAG_ID}"
