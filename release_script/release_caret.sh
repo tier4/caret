@@ -46,6 +46,9 @@ ROS_TRACING_REPOS="ros2_tracing"
 ROS_RCLCPP_REPOS="rclcpp"
 ROS_RCL_REPOS="rcl"
 
+# cyclonedds
+CYCLONEDDS_REPOS="cyclonedds"
+
 # variables
 DRY_RUN=
 TAG_ID=
@@ -133,6 +136,10 @@ ROS_RCLCPP_HASH=$(get_hash_from_repository "${ROOT_DIR}"/${ROS_RCLCPP_PATH})
 ROS_RCL_PATH="src/ros2/${ROS_RCL_REPOS}"
 ROS_RCL_HASH=$(get_hash_from_repository "${ROOT_DIR}"/${ROS_RCL_PATH})
 
+# get hash number from cyclonedds
+CYCLONEDDS_PATH="src/eclipse-cyclonedds/${CYCLONEDDS_REPOS}"
+CYCLONEDDS_HASH=$(get_hash_from_repository "${ROOT_DIR}"/${CYCLONEDDS_PATH})
+
 # checkout caret repository.
 ${DRY_RUN} git checkout -b rc/"${TAG_ID}"
 
@@ -141,6 +148,7 @@ ${DRY_RUN} cp "${SCRIPT_DIR}"/template_caret.repos "${ROOT_DIR}"/caret.repos
 ${DRY_RUN} sed -i -e "s/ROS_TRACING_HASH/${ROS_TRACING_HASH}/g" "${ROOT_DIR}"/caret.repos
 ${DRY_RUN} sed -i -e "s/RCLCPP_HASH/${ROS_RCLCPP_HASH}/g" "${ROOT_DIR}"/caret.repos
 ${DRY_RUN} sed -i -e "s/RCL_HASH/${ROS_RCL_HASH}/g" "${ROOT_DIR}"/caret.repos
+${DRY_RUN} sed -i -e "s/CYCLONEDDS_HASH/${CYCLONEDDS_HASH}/g" "${ROOT_DIR}"/caret.repos
 ${DRY_RUN} sed -i -e "s/CARET_TAG/${TAG_ID}/g" "${ROOT_DIR}"/caret.repos
 
 ${DRY_RUN} git add "${ROOT_DIR}"/caret.repos
