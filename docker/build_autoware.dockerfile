@@ -5,7 +5,7 @@ ARG AUTOWARE_VERSION="main"
 
 RUN apt-get update -y && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        locales=2.35-0ubuntu3.3 \
+        locales \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
