@@ -7,7 +7,7 @@ source {{ WORKSPACE_ROOT }}/caret_topic_filter.bash
 export LD_PRELOAD=$(readlink -f {{ WORKSPACE_ROOT}}/install/caret_trace/lib/libcaret.so)
 
 USERNAME=$(whoami)
-ps aux|grep lttng-sessiond | grep $USERNAME | grep -v grep > /dev/null
+ps -axo user:32,command | grep lttng-sessiond | grep $USERNAME | grep -v grep > /dev/null
 if [ $? -ne 0 ]; then
   lttng-sessiond --daemonize
 fi
