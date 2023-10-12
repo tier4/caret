@@ -2,8 +2,8 @@
     <img src="https://user-images.githubusercontent.com/105265012/182009126-780f5e24-849f-4e0d-ac0e-b429e5d0b3fe.png" alt="CARET logo">
 </div>
 
-[![build-and-test](https://github.com/tier4/CARET_trace/actions/workflows/build-and-test.yaml/badge.svg)](https://github.com/tier4/CARET_trace/actions/workflows/build-and-test.yaml)
-[![pytest](https://github.com/tier4/CARET_analyze/actions/workflows/pytest.yaml/badge.svg)](https://github.com/tier4/CARET_analyze/actions/workflows/pytest.yaml)
+[![build-and-test](https://github.com/tier4/caret_trace/actions/workflows/build-and-test.yaml/badge.svg)](https://github.com/tier4/caret_trace/actions/workflows/build-and-test.yaml)
+[![pytest](https://github.com/tier4/caret_analyze/actions/workflows/pytest.yaml/badge.svg)](https://github.com/tier4/caret_analyze/actions/workflows/pytest.yaml)
 [![Build with Autoware](https://github.com/tier4/caret/actions/workflows/build_autoware.yaml/badge.svg)](https://github.com/tier4/caret/actions/workflows/build_autoware.yaml)
 [![Test with Autoware](https://github.com/tier4/CARET_report/actions/workflows/test_autoware.yaml/badge.svg)](https://github.com/tier4/CARET_report/actions/workflows/test_autoware.yaml)
 
@@ -48,24 +48,24 @@ Also, check out ROSCON 2022 presentation titled "Chain-Aware ROS Evaluation Tool
 
 ## Documentation
 
-- To learn about using CARET, refer to the [CARET document](https://tier4.github.io/CARET_doc/main/)
-- To find API document, refer to [CARET analyze API document](https://tier4.github.io/CARET_analyze/latest/)
+- To learn about using CARET, refer to the [caret document](https://tier4.github.io/caret_doc/main/)
+- To find API document, refer to [caret analyze API document](https://tier4.github.io/caret_analyze/latest/)
 
 ## Repository overview
 
 - [caret](https://github.com/tier4/caret)
   - Meta-repository containing `.repos` files to construct a CARET workspace
-- [CARET_trace](https://github.com/tier4/CARET_trace)
+- [caret_trace](https://github.com/tier4/caret_trace)
   - Define tracepoints added by function hooking
-- [CARET_analyze](https://github.com/tier4/CARET_analyze)
+- [caret_analyze](https://github.com/tier4/caret_analyze)
   - Library for scripts to analyze and visualize data
-- [CARET_analyze_cpp_impl](https://github.com/tier4/CARET_analyze_cpp_impl.git)
+- [caret_analyze_cpp_impl](https://github.com/tier4/caret_analyze_cpp_impl.git)
   - Efficient helper functions to analyze trace data written in C++
 - [ros2caret](https://github.com/tier4/ros2caret.git)
   - CLI commands like `ros2 caret`
-- [CARET_doc](https://github.com/tier4/CARET_doc)
+- [caret_doc](https://github.com/tier4/caret_doc)
   - Documentation
-- [CARET_demos](https://github.com/tier4/CARET_demos)
+- [caret_demos](https://github.com/tier4/caret_demos)
   - Demo programs for CARET
 - [rclcpp](https://github.com/tier4/rclcpp/tree/v0.3.0)
   - The forked `rclcpp` including CARET-dedicated tracepoints

@@ -9,7 +9,7 @@
   pre_tasks:
     - name: Verify OS
       ansible.builtin.fail:
-        msg: Only Ubuntu 22.04 is supported for this branch. Please refer to https://tier4.github.io/CARET_doc/latest/installation/installation/
+        msg: Only Ubuntu 22.04 is supported for this branch. Please refer to https://tier4.github.io/caret_doc/latest/installation/installation/
       when: ansible_distribution_version != '22.04'
 
   roles:

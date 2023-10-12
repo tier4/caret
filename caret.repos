@@ -11,17 +11,17 @@ repositories:
     type: git
     url: https://github.com/tier4/ros2_tracing.git
     version: humble_tracepoint_added
-  CARET/CARET_trace:
+  CARET/caret_trace:
     type: git
-    url: https://github.com/tier4/CARET_trace.git
+    url: https://github.com/tier4/caret_trace.git
     version: main
-  CARET/CARET_analyze:
+  CARET/caret_analyze:
     type: git
-    url: https://github.com/tier4/CARET_analyze.git
+    url: https://github.com/tier4/caret_analyze.git
     version: main
-  CARET/CARET_analyze_cpp_impl:
+  CARET/caret_analyze_cpp_impl:
     type: git
-    url: https://github.com/tier4/CARET_analyze_cpp_impl.git
+    url: https://github.com/tier4/caret_analyze_cpp_impl.git
     version: main
   CARET/ros2caret:
     type: git
