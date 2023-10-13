@@ -33,9 +33,9 @@ ROOT_DIR=$(
 # CARET_* repositories
 CARET_DIRS_PATH="${ROOT_DIR}/src/CARET"
 
-CARET_REPOS_ARRAY=("CARET_trace"
-    "CARET_analyze"
-    "CARET_analyze_cpp_impl"
+CARET_REPOS_ARRAY=("caret_trace"
+    "caret_analyze"
+    "caret_analyze_cpp_impl"
     "ros2caret"
     "caret_common")
 
