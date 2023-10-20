@@ -1,0 +1,20 @@
+- hosts: localhost
+  connection: local
+  become: false
+  vars_prompt:
+    - name: package_install
+      prompt: Would you like to install the require packages[y/n]
+      default: y
+      private: false
+  pre_tasks:
+    - name: Verify OS
+      ansible.builtin.fail:
+        msg: Only Ubuntu 22.04 is supported for this branch. Please refer to https://tier4.github.io/caret_doc/latest/installation/installation/
+      when: ansible_distribution_version != '22.04'
+
+  roles:
+    - { role: lttng, tags: [lttng], when: package_install == 'y' }
+    - { role: ros-tracing, rosdistro: humble, tags: [ros-tracing], when: package_install == 'y' }
+    - { role: visualizer, tags: [visualizer], when: package_install == 'y' }
+    - { role: caret, rosdistro: humble, tags: [caret] }
+    - { role: cyclonedds, rosdistro: humble, tags: [cyclonedds] }

@@ -1,0 +1,5 @@
+rosdistro: humble
+targeted_skip_keys: console_bridge fastcdr fastrtps rti-connext-dds-6.0.1 urdfdom_headers
+setenv_caret_script_template: setenv_caret.bash.jinja2
+caret_topic_filter_template: caret_topic_filter.bash.jinja2
+requirements_path: requirements.txt
