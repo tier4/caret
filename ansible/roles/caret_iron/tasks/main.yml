@@ -43,34 +43,6 @@
   args:
     chdir: "{{ WORKSPACE_ROOT }}"
 
-- name: caret (make symbolic link to rclcpp)
-  ansible.builtin.file:
-    src: "{{ WORKSPACE_ROOT }}/src/ros-tracing/ros2_tracing/tracetools/include/tracetools"
-    dest: "{{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp/include/tracetools"
-    state: link
-    force: true
-
-- name: caret (make symbolic link to rclcpp_action)
-  ansible.builtin.file:
-    src: "{{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp_action/include/rclcpp_action"
-    dest: "{{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp/include/rclcpp_action"
-    state: link
-    force: true
-
-- name: caret (make symbolic link to rclcpp_components)
-  ansible.builtin.file:
-    src: "{{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp_components/include/rclcpp_components"
-    dest: "{{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp/include/rclcpp_components"
-    state: link
-    force: true
-
-- name: caret (make symbolic link to rclcpp_lifecycle)
-  ansible.builtin.file:
-    src: "{{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp_lifecycle/include/rclcpp_lifecycle"
-    dest: "{{ WORKSPACE_ROOT }}/src/ros2/rclcpp/rclcpp/include/rclcpp_lifecycle"
-    state: link
-    force: true
-
 - name: caret (copy CARET setenv template as reference)
   ansible.builtin.template:
     src: "{{ setenv_caret_script_template }}"

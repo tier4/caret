@@ -13,8 +13,8 @@
       when: ansible_distribution_version != '22.04'
 
   roles:
-    - { role: lttng, tags: [lttng], when: package_install == 'y' }
+    - { role: lttng_iron, tags: [lttng], when: package_install == 'y' }
     - { role: ros-tracing, rosdistro: iron, tags: [ros-tracing], when: package_install == 'y' }
     - { role: visualizer, tags: [visualizer], when: package_install == 'y' }
-    - { role: caret, rosdistro: iron, tags: [caret] }
+    - { role: caret_iron, rosdistro: iron, tags: [caret] }
     - { role: cyclonedds, rosdistro: iron, tags: [cyclonedds] }
