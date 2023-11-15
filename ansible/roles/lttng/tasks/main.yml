@@ -9,6 +9,7 @@
     name:
       - lttng-tools
       - liblttng-ust-dev
+    state: latest
   become: true
 
 - name: LTTng (install babeltrace)
