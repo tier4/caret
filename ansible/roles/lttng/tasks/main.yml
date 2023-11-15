@@ -17,4 +17,5 @@
     name:
       - python3-babeltrace
       - python3-lttng
+    state: latest
   become: true
