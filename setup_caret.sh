@@ -25,7 +25,9 @@ function validate_ros_distro() {
 }
 
 # parse command options.
-OPT=$(getopt -o nchd: -l no-interactive,no-package-install,help,ros-distro -- "$@")
+OPT=$(getopt -o nchd: -l no-interactive,no-package-install,help,ros-distro: -- "$@")
+
+eval set -- "$OPT"
 
 # Parse args
 noninteractive=0
@@ -50,11 +52,15 @@ while true; do
         ros_distro=$1
         shift
         ;;
+    --)
+        shift
+        break
+        ;;
     esac
 done
 
 # Check ROS Distribution
-validate_ros_distro ros_distro
+validate_ros_distro $ros_distro
 
 # Confirm whether to start installation
 if [ $noninteractive -eq 0 ]; then
@@ -107,8 +113,14 @@ if [ $package_install -eq 0 ]; then
     options=("--extra-vars" "package_install=n")
 fi
 
+# Select playbook
+PLAYBOOK="playbook.yml"
+if [ $ros_distro = "iron" ]; then
+    PLAYBOOK="playbook_iron.yml"
+fi
+
 # Run ansible
-if ansible-playbook "$SCRIPT_DIR/ansible/playbook.yml" -e WORKSPACE_ROOT="$SCRIPT_DIR" "${options[@]}"; then
+if ansible-playbook "$SCRIPT_DIR/ansible/$PLAYBOOK" -e WORKSPACE_ROOT="$SCRIPT_DIR" "${options[@]}"; then
     echo -e "\e[32mCompleted.\e[0m"
     exit 0
 else
