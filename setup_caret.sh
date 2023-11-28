@@ -10,17 +10,28 @@ function show_usage() {
     echo "    -h or --help: show help message"
     echo "    -c or --no-interactive"
     echo "    -n or --no-package-install"
+    echo "    -d or --ros-distro"
     exit 0
 }
 
-# parse command options.
-OPT=$(getopt -o nch -l no-interactive,no-package-install,help -- "$@")
+ALLOWED_ROS_DISTRO=("humble" "iron")
 
-eval set -- "$OPT"
+function validate_ros_distro() {
+    if [[ ! " ${ALLOWED_ROS_DISTRO[@]} " =~ " $1 " ]]; then
+        echo "error: $1 is not supported ROS Distribution." >&2
+        echo "Supported ROS Distributions are ${ALLOWED_ROS_DISTRO[@]}" >&2
+        exit 1
+    fi
+}
+
+# parse command options.
+OPT=$(getopt -o nchd: -l no-interactive,no-package-install,help,ros-distro -- "$@")
 
 # Parse args
 noninteractive=0
 package_install=1
+ros_distro=humble
+
 
 while true; do
     case $1 in
@@ -35,12 +46,16 @@ while true; do
         package_install=0
         shift
         ;;
-    --)
+    -d | --ros-distro)
         shift
-        break
+        ros_distro=$1
+        shift
         ;;
     esac
 done
+
+# Check ROS Distribution
+validate_ros_distro ros_distro
 
 # Confirm whether to start installation
 if [ $noninteractive -eq 0 ]; then
