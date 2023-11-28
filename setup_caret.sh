@@ -32,7 +32,6 @@ noninteractive=0
 package_install=1
 ros_distro=humble
 
-
 while true; do
     case $1 in
     -h | --help)
