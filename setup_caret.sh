@@ -25,7 +25,7 @@ function validate_ros_distro() {
 }
 
 # parse command options.
-OPT=$(getopt -o nchd: -l no-interactive,no-package-install,help,ros-distro: -- "$@")
+OPT=$(getopt -o nchd: -l no-interactive,no-package-install,help,ros-distro: -- "$@") # cSpell:ignore nchd
 
 eval set -- "$OPT"
 
