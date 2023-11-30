@@ -17,7 +17,7 @@ function show_usage() {
 ALLOWED_ROS_DISTRO=("humble" "iron")
 
 function validate_ros_distro() {
-    if [[ ! " ${ALLOWED_ROS_DISTRO[*]} " == *" $1 "*  ]]; then
+    if [[ " ${ALLOWED_ROS_DISTRO[*]} " != *" $1 "* ]]; then
         echo "error: $1 is not supported ROS Distribution." >&2
         echo "Supported ROS Distributions are ${ALLOWED_ROS_DISTRO[*]}" >&2
         exit 1
