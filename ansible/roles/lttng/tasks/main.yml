@@ -9,6 +9,7 @@
     name:
       - lttng-tools
       - liblttng-ust-dev
+    state: latest
   become: true
 
 - name: LTTng (install babeltrace)
@@ -16,4 +17,5 @@
     name:
       - python3-babeltrace
       - python3-lttng
+    state: latest
   become: true
