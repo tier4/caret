@@ -6,7 +6,7 @@ repositories:
   ros2/rclcpp:
     type: git
     url: https://github.com/tier4/rclcpp.git
-    version: 197d0489c25f1091f072cf4065acba3e46a4e3b3
+    version: humble-with-fix-service-connection-patch-tracepoint-added
   ros-tracing/ros2_tracing:
     type: git
     url: https://github.com/tier4/ros2_tracing.git
