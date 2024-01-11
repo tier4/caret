@@ -1,4 +1,4 @@
-FROM osrf/ros:humble-desktop
+FROM ubuntu:22.04
 
 ARG CARET_VERSION="main"
 ARG AUTOWARE_VERSION="main"
@@ -11,6 +11,7 @@ RUN apt-get update -y && \
     rm -rf /var/lib/apt/lists/*
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
+ENV ROS_DISTRO humble
 
 # Do not use cache
 ADD "https://www.random.org/sequences/?min=1&max=52&col=1&format=plain&rnd=new" /dev/null
@@ -21,18 +22,7 @@ RUN echo "===== GET CARET ====="
 #     git checkout "$CARET_VERSION"
 COPY ./ /ros2_caret_ws
 
-RUN echo "===== Setup CARET ====="
-RUN cd ros2_caret_ws && \
-    rm -rf src build log install && \
-    mkdir src && \
-    vcs import src < caret.repos && \
-    . /opt/ros/"$ROS_DISTRO"/setup.sh && \
-    ./setup_caret.sh -c
-
-RUN echo "===== Build CARET ====="
-RUN cd ros2_caret_ws && \
-    . /opt/ros/"$ROS_DISTRO"/setup.sh && \
-    colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF
+RUN apt update && apt install -y git
 
 RUN echo "===== Setup Autoware ====="
 RUN git clone https://github.com/autowarefoundation/autoware.git && \
@@ -72,6 +62,19 @@ RUN cd /opt/ros/humble/share/pcl_ros/cmake && \
     backup_date="`date +"%Y%m%d_%H%M%S"`" && \
     cp export_pcl_rosExport.cmake export_pcl_rosExport.cmake_"$backup_date"_2 && \
     sed -i -e 's/\/opt\/ros\/humble\/include\/rclcpp;//g' export_pcl_rosExport.cmake
+
+RUN echo "===== Setup CARET ====="
+RUN cd ros2_caret_ws && \
+    rm -rf src build log install && \
+    mkdir src && \
+    vcs import src < caret.repos && \
+    . /opt/ros/"$ROS_DISTRO"/setup.sh && \
+    ./setup_caret.sh -c
+
+RUN echo "===== Build CARET ====="
+RUN cd ros2_caret_ws && \
+    . /opt/ros/"$ROS_DISTRO"/setup.sh && \
+    colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF
 
 RUN echo "===== Build Autoware ====="
 RUN cd autoware && \
