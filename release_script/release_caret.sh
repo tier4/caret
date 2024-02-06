@@ -90,7 +90,7 @@ if [ -z "${TAG_ID}" ]; then
 fi
 
 # check the format of version tag
-if ! [[ "${TAG_ID}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+if ! [[ ${TAG_ID} =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
     echo "Error: Invalid tag format. Tag must be in the format e.g. v0.4.24"
     exit 1
 fi
