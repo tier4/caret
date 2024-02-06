@@ -89,6 +89,12 @@ if [ -z "${TAG_ID}" ]; then
     exit 1
 fi
 
+# check the format of version tag
+if ! [[ ${TAG_ID} =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    echo "Error: Invalid tag format. Tag must be in the format e.g. v0.4.24"
+    exit 1
+fi
+
 if [ "${DRY_RUN}" == "echo" ]; then
     ${DRY_RUN} "This program will run by dry-run mode."
     ${DRY_RUN} "TAG ID: ${TAG_ID}"
