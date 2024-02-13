@@ -29,7 +29,7 @@ repos:
       - id: prettier
 
   - repo: https://github.com/adrienverge/yamllint
-    rev: v1.33.0
+    rev: v1.34.0
     hooks:
       - id: yamllint
 
@@ -39,7 +39,7 @@ repos:
       - id: shellcheck
 
   - repo: https://github.com/scop/pre-commit-shfmt
-    rev: v3.7.0-4
+    rev: v3.8.0-1
     hooks:
       - id: shfmt
         args: [-w, -s, -i=4]
