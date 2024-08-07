@@ -2,37 +2,36 @@ repositories:
   ros2/rcl:
     type: git
     url: https://github.com/ros2/rcl.git
-    version: humble
+    version: 6d52f2b54980140476222b420467e7fbd8575dd9
   ros2/rclcpp:
     type: git
     url: https://github.com/tier4/rclcpp.git
-    version: humble_tracepoint_added
+    version: 197d0489c25f1091f072cf4065acba3e46a4e3b3
   ros-tracing/ros2_tracing:
     type: git
     url: https://github.com/tier4/ros2_tracing.git
-    version: humble_tracepoint_added
+    version: 4a2415f37a3c8d14f8fd7b63057e82755dfc6a22
   CARET/caret_trace:
     type: git
     url: https://github.com/tier4/caret_trace.git
-    version: main
+    version: v0.5.9
   CARET/caret_analyze:
     type: git
     url: https://github.com/tier4/caret_analyze.git
-    version: main
+    version: v0.5.9
   CARET/caret_analyze_cpp_impl:
     type: git
     url: https://github.com/tier4/caret_analyze_cpp_impl.git
-    version: main
+    version: v0.5.9
   CARET/ros2caret:
     type: git
     url: https://github.com/tier4/ros2caret.git
-    version: main
-  # Dependency for CI/CD
+    version: v0.5.9
   CARET/caret_common:
     type: git
     url: https://github.com/tier4/caret_common.git
-    version: main
+    version: v0.5.9
   eclipse-cyclonedds/cyclonedds:
     type: git
     url: https://github.com/eclipse-cyclonedds/cyclonedds.git
-    version: releases/0.10.x
+    version: 454df330c7bc213729ccf714c20807b22d02f007
