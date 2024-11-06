@@ -11,6 +11,6 @@
     requirements: "{{ requirements_path }}"
     executable: pip3
     extra_args: --ignore-installed
-  become: true
+  become: false
   args:
     chdir: "{{ WORKSPACE_ROOT }}"
