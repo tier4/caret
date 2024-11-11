@@ -122,8 +122,13 @@ fi
 # Run ansible
 if ansible-playbook "$SCRIPT_DIR/ansible/$PLAYBOOK" -e WORKSPACE_ROOT="$SCRIPT_DIR" "${options[@]}"; then
     echo -e "\e[32mCompleted.\e[0m"
-    exit 0
 else
     echo -e "\e[31mFailed.\e[0m"
     exit 1
 fi
+
+# Add PATH
+grep -Fxq "export PATH=\$PATH:$HOME/.local/bin" "$HOME/.bashrc" || {
+    echo "export PATH=\$PATH:$HOME/.local/bin" >> "$HOME/.bashrc"
+}
+exit 0
