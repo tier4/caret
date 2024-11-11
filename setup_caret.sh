@@ -96,12 +96,11 @@ fi
 
 # Run ansible if confirmed
 # Install ansible
-# TODO: To update Ansible 6.*
 ansible_version=$(pip3 list | grep -oP "^ansible\s+\K([0-9]+)" || true)
-if [ "$ansible_version" != "5" ]; then
+if [ "$ansible_version" != "6" ]; then
     sudo apt-get -y update
     sudo apt-get -y purge ansible
-    sudo pip3 install -U "ansible==5.*"
+    sudo pip3 install -U "ansible==6.*"
 fi
 
 # Set options
