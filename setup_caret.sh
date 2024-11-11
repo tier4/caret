@@ -129,6 +129,6 @@ fi
 
 # Add PATH
 grep -Fxq "export PATH=\$PATH:$HOME/.local/bin" "$HOME/.bashrc" || {
-    echo "export PATH=\$PATH:$HOME/.local/bin" >> "$HOME/.bashrc"
+    echo "export PATH=\$PATH:$HOME/.local/bin" >>"$HOME/.bashrc"
 }
 exit 0
