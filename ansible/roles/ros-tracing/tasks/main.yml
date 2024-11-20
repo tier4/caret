@@ -9,7 +9,7 @@
   pip:
     requirements: "{{ requirements_path }}"
     executable: pip3
-  become: true
+  become: false
   args:
     chdir: "{{ WORKSPACE_ROOT }}"
 
