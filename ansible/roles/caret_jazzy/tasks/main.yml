@@ -1,0 +1,58 @@
+- name: ROS2 (check rosdep file)
+  stat:
+    path: /etc/ros/rosdep/sources.list.d/20-default.list
+  register: ros_repository
+
+- name: ROS2 (install rosdep)
+  apt:
+    name: python3-rosdep
+    state: latest
+    update_cache: true
+  become: true
+
+- name: ROS2 (initialize rosdep)
+  command: rosdep init
+  when: ros_repository.stat.exists == false
+  become: true
+
+- name: ROS2 (update rosdep)
+  command: rosdep update
+  become: false
+
+- name: caret (rosdep install dependencies)
+  shell: |
+    rosdep install -y --from-paths src --ignore-src --rosdistro {{ rosdistro }} -y --skip-keys "{{ targeted_skip_keys }}"
+  args:
+    chdir: "{{ WORKSPACE_ROOT }}"
+
+- name: caret (install some packages for build)
+  apt:
+    name:
+      - ros-{{ rosdistro }}-osrf-testing-tools-cpp
+      - ros-{{ rosdistro }}-performance-test-fixture
+      - ros-{{ rosdistro }}-mimick-vendor
+      - ros-{{ rosdistro }}-test-msgs
+      - ros-{{ rosdistro }}-cyclonedds
+  become: true
+
+- name: caret (install python module)
+  pip:
+    requirements: "{{ requirements_path }}"
+    executable: pip3
+  become: false
+  args:
+    chdir: "{{ WORKSPACE_ROOT }}"
+
+- name: caret (copy CARET setenv template as reference)
+  ansible.builtin.template:
+    src: "{{ setenv_caret_script_template }}"
+    dest: "{{ WORKSPACE_ROOT }}/setenv_caret.bash"
+    mode: 0755
+  become: false
+
+- name: caret (copy topic filter as reference)
+  ansible.builtin.template:
+    src: "{{ caret_topic_filter_template }}"
+    dest: "{{ WORKSPACE_ROOT }}/caret_topic_filter.bash"
+    mode: 0755
+  become: false
