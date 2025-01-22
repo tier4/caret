@@ -14,7 +14,7 @@ function show_usage() {
     exit 0
 }
 
-ALLOWED_ROS_DISTRO=("humble" "iron", "jazzy")
+ALLOWED_ROS_DISTRO=("humble" "iron" "jazzy")
 
 function validate_ros_distro() {
     if [[ " ${ALLOWED_ROS_DISTRO[*]} " != *" $1 "* ]]; then
