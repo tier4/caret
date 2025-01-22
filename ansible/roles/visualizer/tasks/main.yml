@@ -4,7 +4,7 @@
       - graphviz
       - graphviz-dev
     update_cache: true
-  become: false
+  become: true
 
 - name: Install caret dependent packages
   pip:
