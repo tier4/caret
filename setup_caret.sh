@@ -96,13 +96,13 @@ fi
 
 # Run ansible if confirmed
 # Install ansible
-ansible_version=$(pip3 list | grep -oP "^ansible\s+\K([0-9]+)" || true)
-if [ "$ansible_version" != "6" ]; then
-    sudo apt-get -y update
-    sudo apt-get -y purge ansible
-    if [ "$ros_distro" = "jazzy" ]; then
-        pip3 install -U ansible
-    else
+if [ "$ros_distro" = "jazzy" ]; then
+    pip3 install -U ansible
+else
+    ansible_version=$(pip3 list | grep -oP "^ansible\s+\K([0-9]+)" || true)
+    if [ "$ansible_version" != "6" ]; then
+        sudo apt-get -y update
+        sudo apt-get -y purge ansible
         sudo pip3 install -U "ansible==6.*"
     fi
 fi
