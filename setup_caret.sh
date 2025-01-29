@@ -14,7 +14,7 @@ function show_usage() {
     exit 0
 }
 
-ALLOWED_ROS_DISTRO=("humble" "iron")
+ALLOWED_ROS_DISTRO=("humble" "iron" "jazzy")
 
 function validate_ros_distro() {
     if [[ " ${ALLOWED_ROS_DISTRO[*]} " != *" $1 "* ]]; then
@@ -96,11 +96,15 @@ fi
 
 # Run ansible if confirmed
 # Install ansible
-ansible_version=$(pip3 list | grep -oP "^ansible\s+\K([0-9]+)" || true)
-if [ "$ansible_version" != "6" ]; then
-    sudo apt-get -y update
-    sudo apt-get -y purge ansible
-    sudo pip3 install -U "ansible==6.*"
+if [ "$ros_distro" = "jazzy" ]; then
+    pip3 install -U ansible
+else
+    ansible_version=$(pip3 list | grep -oP "^ansible\s+\K([0-9]+)" || true)
+    if [ "$ansible_version" != "6" ]; then
+        sudo apt-get -y update
+        sudo apt-get -y purge ansible
+        sudo pip3 install -U "ansible==6.*"
+    fi
 fi
 
 # Set options
@@ -116,6 +120,8 @@ fi
 PLAYBOOK="playbook.yml"
 if [ "$ros_distro" = "iron" ]; then
     PLAYBOOK="playbook_iron.yml"
+elif [ "$ros_distro" = "jazzy" ]; then
+    PLAYBOOK="playbook_jazzy.yml"
 fi
 
 # Run ansible
