@@ -21,8 +21,8 @@ repositories:
     version: agnocast
   CARET/caret_analyze_cpp_impl:
     type: git
-    url: e2f908ae3fd6cdbead20e635d2005e89de1024f8
-    version: main
+    url: https://github.com/tier4/caret_analyze_cpp_impl.git
+    version: e2f908ae3fd6cdbead20e635d2005e89de1024f8
   CARET/ros2caret:
     type: git
     url: https://github.com/tier4/ros2caret.git
