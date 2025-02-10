@@ -14,14 +14,14 @@ repositories:
   CARET/caret_trace:
     type: git
     url: https://github.com/tier4/caret_trace.git
-    version: main
+    version: 64324db8d71f9c2b94114829f032f2db4e811a23
   CARET/caret_analyze:
     type: git
     url: https://github.com/atsushi421/CARET_analyze.git
     version: agnocast
   CARET/caret_analyze_cpp_impl:
     type: git
-    url: https://github.com/tier4/caret_analyze_cpp_impl.git
+    url: e2f908ae3fd6cdbead20e635d2005e89de1024f8
     version: main
   CARET/ros2caret:
     type: git
