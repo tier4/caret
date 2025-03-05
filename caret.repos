@@ -32,7 +32,14 @@ repositories:
     type: git
     url: https://github.com/tier4/caret_common.git
     version: main
+
+  ### Optional packages. Apply CARET for widely used pre-built packages ###
+  ### Delete or change version depending on a target application ###
   eclipse-cyclonedds/cyclonedds:
     type: git
     url: https://github.com/eclipse-cyclonedds/cyclonedds.git
     version: releases/0.10.x
+  ros-tooling/topic_tools:
+    type: git
+    url: https://github.com/ros-tooling/topic_tools.git
+    version: 1.1.1
