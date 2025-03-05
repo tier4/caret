@@ -36,3 +36,7 @@ repositories:
     type: git
     url: https://github.com/eclipse-cyclonedds/cyclonedds.git
     version: releases/0.10.x
+  ros-tooling/topic_tools:  # To apply CARET for widely used pre-built packages
+    type: git
+    url: https://github.com/ros-tooling/topic_tools.git
+    version: 1.1.1
