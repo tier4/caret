@@ -39,3 +39,7 @@ repositories:
     type: git
     url: https://github.com/tier4/glog.git
     version: v0.6.0_t4-ros
+  ros-tooling/topic_tools:  # To apply CARET for widely used pre-built packages
+    type: git
+    url: https://github.com/ros-tooling/topic_tools.git
+    version: 1.1.1
