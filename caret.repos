@@ -26,7 +26,7 @@ repositories:
   CARET/ros2caret:
     type: git
     url: https://github.com/tier4/ros2caret.git
-    version: main
+    version: agnocast
   # Dependency for CI/CD
   CARET/caret_common:
     type: git
