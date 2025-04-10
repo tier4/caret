@@ -16,7 +16,7 @@
   become: true
 
 - name: ROS2 (update rosdep)
-  command: rosdep update
+  command: rosdep update --include-eol-distros
   become: false
 
 - name: caret (rosdep install dependencies)
