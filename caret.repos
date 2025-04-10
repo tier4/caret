@@ -14,7 +14,7 @@ repositories:
   CARET/caret_trace:
     type: git
     url: https://github.com/tier4/caret_trace.git
-    version: main
+    version: feat/support-multiple-container-by-single-session
   CARET/caret_analyze:
     type: git
     url: https://github.com/tier4/caret_analyze.git
@@ -26,7 +26,7 @@ repositories:
   CARET/ros2caret:
     type: git
     url: https://github.com/tier4/ros2caret.git
-    version: main
+    version: feat/support-multiple-container-by-single-session
   # Dependency for CI/CD
   CARET/caret_common:
     type: git
