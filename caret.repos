@@ -10,7 +10,7 @@ repositories:
   ros-tracing/ros2_tracing:
     type: git
     url: https://github.com/tier4/ros2_tracing.git
-    version: humble_tracepoint_added_small_buffer_size_add_agnocast
+    version: 85b4027a5e305a13a208282ffd6314b349631bb0
   CARET/caret_trace:
     type: git
     url: https://github.com/tier4/caret_trace.git
@@ -26,7 +26,7 @@ repositories:
   CARET/ros2caret:
     type: git
     url: https://github.com/tier4/ros2caret.git
-    version: rc/v0.6.2-for-evaluator-add-agnocast
+    version: 6c3c80cdc52de62ec896945c68d0c7fe35954efa
   CARET/caret_common:
     type: git
     url: https://github.com/tier4/caret_common.git
