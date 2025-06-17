@@ -1,0 +1,6 @@
+# Required
+namespace: autoware
+name: edge_auto_jetson
+version: 0.1.0
+readme: README.md
+authors:
