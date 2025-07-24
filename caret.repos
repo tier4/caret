@@ -10,7 +10,7 @@ repositories:
   ros-tracing/ros2_tracing:
     type: git
     url: https://github.com/tier4/ros2_tracing.git
-    version: agnocast
+    version: humble_tracepoint_added
   CARET/caret_trace:
     type: git
     url: https://github.com/tier4/caret_trace.git
