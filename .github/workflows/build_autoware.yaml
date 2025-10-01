@@ -14,6 +14,17 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+        - name: 🧹 Clean up disk space before build
+        run: |
+          echo "Disk usage before cleanup:"
+          df -h
+          sudo apt-get autoremove -y
+          sudo apt-get clean
+          sudo rm -rf /usr/share/dotnet
+          docker system prune -a -f --volumes || true
+          echo "Disk usage after cleanup:"
+          df -h
+
       - name: Docker Build
         run: |
           docker pull osrf/ros:humble-desktop
