@@ -14,6 +14,17 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: 📈 Measure disk usage before cleanup
+        # inner /home/runner/work/
+        run: |
+          echo "--- Top 10 Largest Directories on Runner ---"
+          sudo du -shx /* 2>/dev/null | sort -rh | head -10
+          echo "------------------------------------------------"
+
+          echo "--- Runner Workspace Breakdown (Excluding Repo) ---"
+          sudo du -sh /home/runner/work/*/*/* 2>/dev/null | sort -rh | head -10
+          echo "----------------------------------------------------"
+
       - name: Clean up disk space before build
         run: |
           echo "Disk usage before cleanup:"
