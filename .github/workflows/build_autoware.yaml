@@ -10,33 +10,39 @@ jobs:
   build:
     runs-on: ubuntu-22.04
 
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-      - name: 📈 Measure disk usage before cleanup
-        # inner /home/runner/work/
-        run: |
-          echo "--- Top 10 Largest Directories on Runner ---"
-          sudo du -shx /* 2>/dev/null | sort -rh | head -10
-          echo "------------------------------------------------"
+      - name: 1. Measure disk usage BEFORE cleanup
+        run: |
+          echo "--- TOP 10 DIRS BEFORE CLEANUP ---"
+          sudo du -shx /* 2>/dev/null | sort -rh | head -10
+          echo "--- WORKSPACE BREAKDOWN BEFORE CLEANUP ---"
+          sudo du -sh /home/runner/work/*/*/* 2>/dev/null | sort -rh | head -10
 
-          echo "--- Runner Workspace Breakdown (Excluding Repo) ---"
-          sudo du -sh /home/runner/work/*/*/* 2>/dev/null | sort -rh | head -10
-          echo "----------------------------------------------------"
+      - name: 🧹 Clean up disk space
+        run: |
+          df -h # before disk cleanup
+          sudo apt-get autoremove -y
+          sudo apt-get clean
+          sudo rm -rf /usr/share/dotnet
+          docker system prune -a -f --volumes || true
+          df -h # after disk cleanup
 
-      - name: Clean up disk space before build
-        run: |
-          echo "Disk usage before cleanup:"
-          df -h
-          sudo apt-get autoremove -y
-          sudo apt-get clean
-          sudo rm -rf /usr/share/dotnet
-          docker system prune -a -f --volumes || true
-          echo "Disk usage after cleanup:"
-          df -h
+      - name: 2. Measure disk usage AFTER cleanup
+        run: |
+          echo "--- TOP 10 DIRS AFTER CLEANUP ---"
+          sudo du -shx /* 2>/dev/null | sort -rh | head -10
 
-      - name: Docker Build
-        run: |
-          docker pull osrf/ros:humble-desktop
-          docker image build --no-cache=true -t caret/caret_autoware:latest -f ./docker/build_autoware.dockerfile ./
+      - name: Docker Build
+        run: |
+          docker pull osrf/ros:humble-desktop
+          docker image build --no-cache=true -t caret/caret_autoware:latest -f ./docker/build_autoware.dockerfile ./
+
+      - name: 3. Measure disk usage AFTER build
+        run: |
+          echo "--- WORKSPACE BREAKDOWN AFTER BUILD ---"
+          sudo du -sh /home/runner/work/*/*/* 2>/dev/null | sort -rh | head -10
+          df -h # after build
+
