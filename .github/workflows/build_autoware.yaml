@@ -18,8 +18,10 @@ jobs:
         run: |
           echo "--- TOP 10 DIRS BEFORE CLEANUP ---"
           sudo du -shx /* 2>/dev/null | sort -rh | head -10
-          echo "--- WORKSPACE BREAKDOWN BEFORE CLEANUP ---"
-          sudo du -sh /home/runner/work/*/*/* 2>/dev/null | sort -rh | head -10
+          echo "--- TOP 10 /var BEFORE CLEANUP ---"
+          sudo du -h /var/ | sort -rh | head -10
+          echo "--- TOP 10 /usr BEFORE CLEANUP ---"
+          sudo du -h /usr/ | sort -rh | head -10
 
       - name: Clean up disk space
         run: |
@@ -34,6 +36,10 @@ jobs:
         run: |
           echo "--- TOP 10 DIRS AFTER CLEANUP ---"
           sudo du -shx /* 2>/dev/null | sort -rh | head -10
+          echo "--- TOP 10 /var AFTER CLEANUP ---"
+          sudo du -h /var/ | sort -rh | head -10
+          echo "--- TOP 10 /usr AFTER CLEANUP ---"
+          sudo du -h /usr/ | sort -rh | head -10
 
       - name: Docker Build
         run: |
@@ -42,6 +48,10 @@ jobs:
 
       - name: 3. Measure disk usage AFTER build
         run: |
-          echo "--- WORKSPACE BREAKDOWN AFTER BUILD ---"
-          sudo du -sh /home/runner/work/*/*/* 2>/dev/null | sort -rh | head -10
+          echo "--- TOP 10 DIRS AFTER BUILD ---"
+          sudo du -shx /* 2>/dev/null | sort -rh | head -10
+          echo "--- TOP 10 /var AFTER BUILD ---"
+          sudo du -h /var/ | sort -rh | head -10
+          echo "--- TOP 10 /usr AFTER BUILD ---"
+          sudo du -h /usr/ | sort -rh | head -10
           df -h # after build
