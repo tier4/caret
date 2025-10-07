@@ -57,7 +57,6 @@ jobs:
           echo "--- Docker Image Layer Sizes history ---"
           COLUMNS=200 docker history caret/caret_autoware:latest
 
-
       - name: 3. Measure disk usage AFTER build
         run: |
           echo "--- TOP 10 DIRS AFTER BUILD ---"
