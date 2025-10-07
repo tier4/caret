@@ -48,8 +48,15 @@ jobs:
 
       - name: Analyze Docker Image Size
         run: |
-          echo "--- Docker Image Layer Sizes ---"
-          docker history caret/caret_autoware:latest
+          echo "--- Docker Image Layer Sizes inspect ---"
+          docker inspect --format='{{range .RootFS.Layers}}
+          Layer ID: {{.Digest}}
+          Size: {{.Size}} bytes
+          {{end}}' caret/caret_autoware:latest
+
+          echo "--- Docker Image Layer Sizes history ---"
+          COLUMNS=200 docker history caret/caret_autoware:latest
+
 
       - name: 3. Measure disk usage AFTER build
         run: |
