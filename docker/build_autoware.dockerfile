@@ -16,17 +16,10 @@ ENV ROS_DISTRO humble
 ADD "https://www.random.org/sequences/?min=1&max=52&col=1&format=plain&rnd=new" /dev/null
 
 RUN echo "===== GET CARET ====="
-# RUN git clone https://github.com/tier4/caret.git ros2_caret_ws && \
-# cd ros2_caret_ws && \
-# git checkout "$CARET_VERSION"
+# COPYはDockerビルドコンテキストのファイルを/ros2_caret_wsにコピー
 COPY ./ /ros2_caret_ws
 
 RUN apt update && apt install -y git
-
-# --- check disk usage 1: after autoware source downloads
-RUN echo "===== DISK USAGE AFTER AUTOWARE SOURCE DOWNLOAD =====" && \
-    df -h && \
-    du -sh autoware/src ros2_caret_ws/src
 
 RUN echo "===== Setup Autoware ====="
 RUN git clone https://github.com/autowarefoundation/autoware.git && \
@@ -45,6 +38,12 @@ RUN git clone https://github.com/autowarefoundation/autoware.git && \
 # workarounds:
 # install ros-humble-pacmod3-msgs manually because rosdep tries to install ros-galactic-pacmod3-msgs
 # remove gpg because build error happens in ad_api_visualizers for some reasons...
+
+# --- check disk usage 1: Autowareソースダウンロード後 (正しい位置に移動)
+RUN echo "===== DISK USAGE AFTER AUTOWARE SOURCE DOWNLOAD =====" && \
+    df -h && \
+    du -sh autoware/src ros2_caret_ws/src
+
 # workaround: remove agnocast because CARET doesn't support Agnocast yet and Agnocast is not used by default
 RUN rm -rf autoware/src/middleware/external/agnocast
 RUN rm -rf autoware/src/universe/autoware_universe/common/autoware_agnocast_wrapper
@@ -91,7 +90,7 @@ RUN cd ros2_caret_ws && \
 # --- check disk usage 3: after CARET built
 RUN echo "===== DISK USAGE AFTER CARET BUILD (Check Build Cache) =====" && \
     df -h && \
-    du -sh ros2_caret_ws/* autoware/*
+    du -sh ros2_caret_ws/build autoware/build
 
 RUN echo "===== Build Autoware ====="
 RUN cd autoware && \
