@@ -3,15 +3,15 @@ FROM ubuntu:22.04
 ARG CARET_VERSION="main"
 ARG AUTOWARE_VERSION="main"
 
-RUN apt-get update -y && 
+RUN apt-get update -y &&
 
-DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends 
+DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends
 
-locales 
+locales
 
-&& 
+&&
 
-apt-get clean && 
+apt-get clean &&
 
 rm -rf /var/lib/apt/lists/*
 RUN locale-gen en_US.UTF-8
@@ -31,36 +31,36 @@ COPY ./ /ros2_caret_ws
 RUN apt update && apt install -y git
 
 # --- check disk usage  1: after autoware source downloads
-RUN echo "===== DISK USAGE AFTER AUTOWARE SOURCE DOWNLOAD =====" && 
+RUN echo "===== DISK USAGE AFTER AUTOWARE SOURCE DOWNLOAD =====" &&
 
-df -h && 
+df -h &&
 
 du -sh autoware/src ros2_caret_ws/src
 
 RUN echo "===== Setup Autoware ====="
-RUN git clone https://github.com/autowarefoundation/autoware.git && 
+RUN git clone https://github.com/autowarefoundation/autoware.git &&
 
-cd autoware && 
+cd autoware &&
 
-git checkout "$AUTOWARE_VERSION" && 
+git checkout "$AUTOWARE_VERSION" &&
 
-DEBIAN_FRONTEND=noninteractive apt install python3.10-venv -y && 
+DEBIAN_FRONTEND=noninteractive apt install python3.10-venv -y &&
 
-./setup-dev-env.sh -y --no-nvidia --no-cuda-drivers && 
+./setup-dev-env.sh -y --no-nvidia --no-cuda-drivers &&
 
-mkdir src && 
+mkdir src &&
 
-vcs import src < autoware.repos && 
+vcs import src < autoware.repos &&
 
-vcs export --exact src && 
+vcs export --exact src &&
 
-. /opt/ros/"$ROS_DISTRO"/setup.sh && 
+. /opt/ros/"$ROS_DISTRO"/setup.sh &&
 
-rosdep update && 
+rosdep update &&
 
-DEBIAN_FRONTEND=noninteractive apt-get install -y ros-humble-pacmod3-msgs=1.0.0-0jammy && 
+DEBIAN_FRONTEND=noninteractive apt-get install -y ros-humble-pacmod3-msgs=1.0.0-0jammy &&
 
-DEBIAN_FRONTEND=noninteractive apt-get remove -y python3-gpg && 
+DEBIAN_FRONTEND=noninteractive apt-get remove -y python3-gpg &&
 
 DEBIAN_FRONTEND=noninteractive rosdep install -y --from-paths src --ignore-src --rosdistro "$ROS_DISTRO"
 
@@ -73,91 +73,91 @@ RUN rm -rf autoware/src/universe/autoware_universe/common/autoware_agnocast_wrap
 
 https://github.com/ament/ament_cmake/commit/799183ab9bcfd9b66df0de9b644abaf8c9b78e84
 RUN echo "===== Modify ament_cmake_auto as workaround ====="
-RUN cd /opt/ros/humble/share/ament_cmake_auto/cmake && 
+RUN cd /opt/ros/humble/share/ament_cmake_auto/cmake &&
 
-backup_date="date +"%Y%m%d_%H%M%S"" && 
+backup_date="date +"%Y%m%d_%H%M%S"" &&
 
-cp ament_auto_add_executable.cmake ament_auto_add_executable.cmake_"$backup_date" && 
+cp ament_auto_add_executable.cmake ament_auto_add_executable.cmake_"$backup_date" &&
 
-cp ament_auto_add_library.cmake ament_auto_add_library.cmake_"$backup_date" && 
+cp ament_auto_add_library.cmake ament_auto_add_library.cmake_"$backup_date" &&
 
-sed -i -e 's/SYSTEM//g' ament_auto_add_executable.cmake && 
+sed -i -e 's/SYSTEM//g' ament_auto_add_executable.cmake &&
 
 sed -i -e 's/SYSTEM//g' ament_auto_add_library.cmake
 
 RUN echo "===== Modify pcl_ros (libtracetools.so) as workaround ====="
-RUN cd /opt/ros/humble/share/pcl_ros/cmake && 
+RUN cd /opt/ros/humble/share/pcl_ros/cmake &&
 
-backup_date="date +"%Y%m%d_%H%M%S"" && 
+backup_date="date +"%Y%m%d_%H%M%S"" &&
 
-cp export_pcl_rosExport.cmake export_pcl_rosExport.cmake_"$backup_date" && 
+cp export_pcl_rosExport.cmake export_pcl_rosExport.cmake_"$backup_date" &&
 
 sed -i -e 's//opt/ros/humble/lib/libtracetools.so;//g' export_pcl_rosExport.cmake
 
 RUN echo "===== Modify pcl_ros (rclcpp) as workaround ====="
-RUN cd /opt/ros/humble/share/pcl_ros/cmake && 
+RUN cd /opt/ros/humble/share/pcl_ros/cmake &&
 
-backup_date="date +"%Y%m%d_%H%M%S"" && 
+backup_date="date +"%Y%m%d_%H%M%S"" &&
 
-cp export_pcl_rosExport.cmake export_pcl_rosExport.cmake_"$backup_date"_2 && 
+cp export_pcl_rosExport.cmake export_pcl_rosExport.cmake_"$backup_date"_2 &&
 
 sed -i -e 's//opt/ros/humble/include/rclcpp;//g' export_pcl_rosExport.cmake
 
 RUN echo "===== Setup CARET ====="
-RUN cd ros2_caret_ws && 
+RUN cd ros2_caret_ws &&
 
-rm -rf src build log install && 
+rm -rf src build log install &&
 
-mkdir src && 
+mkdir src &&
 
-vcs import src < caret.repos && 
+vcs import src < caret.repos &&
 
-. /opt/ros/"$ROS_DISTRO"/setup.sh && 
+. /opt/ros/"$ROS_DISTRO"/setup.sh &&
 
 ./setup_caret.sh -c
 
 # --- check disk usage  2: before build
-RUN echo "===== DISK USAGE BEFORE CARET BUILD =====" && 
+RUN echo "===== DISK USAGE BEFORE CARET BUILD =====" &&
 
-df -h && 
+df -h &&
 
 du -sh ros2_caret_ws/* autoware/*
 
 RUN echo "===== Build CARET ====="
-RUN cd ros2_caret_ws && 
+RUN cd ros2_caret_ws &&
 
-. /opt/ros/"$ROS_DISTRO"/setup.sh && 
+. /opt/ros/"$ROS_DISTRO"/setup.sh &&
 
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF
 
 # --- check disk usage  3: after CARET built
-RUN echo "===== DISK USAGE AFTER CARET BUILD (Check Build Cache) =====" && 
+RUN echo "===== DISK USAGE AFTER CARET BUILD (Check Build Cache) =====" &&
 
-df -h && 
+df -h &&
 
 du -sh ros2_caret_ws/* autoware/*
 
 RUN echo "===== Build Autoware ====="
-RUN cd autoware && 
+RUN cd autoware &&
 
-. /opt/ros/"$ROS_DISTRO"/setup.sh && 
+. /opt/ros/"$ROS_DISTRO"/setup.sh &&
 
-. /ros2_caret_ws/install/local_setup.sh && 
+. /ros2_caret_ws/install/local_setup.sh &&
 
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=Off -DCMAKE_CXX_FLAGS="-w"
 
 # --- check disk usage  4: after Autoware built
-RUN echo "===== DISK USAGE AFTER AUTOWARE BUILD (Check Final Build Cache) =====" && 
+RUN echo "===== DISK USAGE AFTER AUTOWARE BUILD (Check Final Build Cache) =====" &&
 
-df -h && 
+df -h &&
 
 du -sh autoware/build autoware/log ros2_caret_ws/build ros2_caret_ws/log
 
 RUN echo "===== Verify Build ====="
-RUN cd autoware && 
+RUN cd autoware &&
 
-. /opt/ros/"$ROS_DISTRO"/setup.sh && 
+. /opt/ros/"$ROS_DISTRO"/setup.sh &&
 
-. /ros2_caret_ws/install/local_setup.sh && 
+. /ros2_caret_ws/install/local_setup.sh &&
 
 ros2 caret check_caret_rclcpp ./
