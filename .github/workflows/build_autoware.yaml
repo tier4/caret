@@ -46,10 +46,10 @@ jobs:
           docker pull osrf/ros:humble-desktop
           docker image build --no-cache=true -t caret/caret_autoware:latest -f ./docker/build_autoware.dockerfile ./
 
-      - name: Analyze Docker Image Size
-        run: |
-          echo "--- Docker Image Layer Sizes ---"
-          docker history caret/caret_autoware:latest
+      - name: Analyze Docker Image Size
+        run: |
+          echo "--- Docker Image Layer Sizes ---"
+          docker history caret/caret_autoware:latest
 
       - name: 3. Measure disk usage AFTER build
         run: |
