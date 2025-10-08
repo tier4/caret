@@ -3,19 +3,23 @@ FROM ubuntu:22.04
 ARG CARET_VERSION="main"
 ARG AUTOWARE_VERSION="main"
 
-# 1. Base setup and locale
 RUN apt-get update -y && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends locales && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        locales \
+        && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV ROS_DISTRO humble
 
-# Do not use cache - ADD command uses a unique URL to prevent caching
+# Do not use cache
 ADD "https://www.random.org/sequences/?min=1&max=52&col=1&format=plain&rnd=new" /dev/null
 
 RUN echo "===== GET CARET ====="
+# RUN git clone https://github.com/tier4/caret.git ros2_caret_ws && \
+#     cd ros2_caret_ws && \
+#     git checkout "$CARET_VERSION"
 COPY ./ /ros2_caret_ws
 
 RUN apt update && apt install -y git
@@ -38,15 +42,6 @@ RUN git clone https://github.com/autowarefoundation/autoware.git && \
 # install ros-humble-pacmod3-msgs manually because rosdep tries to install ros-galactic-pacmod3-msgs
 # remove gpg because build error happens in ad_api_visualizers for some reasons...
 
-# --- check disk usage 1
-RUN echo "===== DISK USAGE AFTER AUTOWARE SOURCE DOWNLOAD =====" && \
-    df -h && \
-    du -sh du -sh ros2_caret_ws/* autoware/* || true
-
-# workaround: remove agnocast because CARET doesn't support Agnocast yet and Agnocast is not used by default
-RUN rm -rf autoware/src/middleware/external/agnocast
-RUN rm -rf autoware/src/universe/autoware_universe/common/autoware_agnocast_wrapper
-
 # https://github.com/ament/ament_cmake/commit/799183ab9bcfd9b66df0de9b644abaf8c9b78e84
 RUN echo "===== Modify ament_cmake_auto as workaround ====="
 RUN cd /opt/ros/humble/share/ament_cmake_auto/cmake && \
@@ -60,13 +55,13 @@ RUN echo "===== Modify pcl_ros (libtracetools.so) as workaround ====="
 RUN cd /opt/ros/humble/share/pcl_ros/cmake && \
     backup_date="`date +"%Y%m%d_%H%M%S"`" && \
     cp export_pcl_rosExport.cmake export_pcl_rosExport.cmake_"$backup_date" && \
-    sed -i -e 's#/opt/ros/humble/lib/libtracetools.so;##g' export_pcl_rosExport.cmake
+    sed -i -e 's/\/opt\/ros\/humble\/lib\/libtracetools.so;//g' export_pcl_rosExport.cmake
 
 RUN echo "===== Modify pcl_ros (rclcpp) as workaround ====="
 RUN cd /opt/ros/humble/share/pcl_ros/cmake && \
     backup_date="`date +"%Y%m%d_%H%M%S"`" && \
     cp export_pcl_rosExport.cmake export_pcl_rosExport.cmake_"$backup_date"_2 && \
-    sed -i -e 's#/opt/ros/humble/include/rclcpp;##g' export_pcl_rosExport.cmake
+    sed -i -e 's/\/opt\/ros\/humble\/include\/rclcpp;//g' export_pcl_rosExport.cmake
 
 RUN echo "===== Setup CARET ====="
 RUN cd ros2_caret_ws && \
@@ -76,31 +71,16 @@ RUN cd ros2_caret_ws && \
     . /opt/ros/"$ROS_DISTRO"/setup.sh && \
     ./setup_caret.sh -c
 
-# --- check disk usage 2: before build
-RUN echo "===== DISK USAGE BEFORE CARET BUILD =====" && \
-    df -h && \
-    du -sh ros2_caret_ws/* autoware/*
-
 RUN echo "===== Build CARET ====="
 RUN cd ros2_caret_ws && \
     . /opt/ros/"$ROS_DISTRO"/setup.sh && \
     colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF
-
-# --- check disk usage 3: after CARET built
-RUN echo "===== DISK USAGE AFTER CARET BUILD (Check Build Cache) =====" && \
-    df -h && \
-    du -sh ros2_caret_ws/* autoware/*
 
 RUN echo "===== Build Autoware ====="
 RUN cd autoware && \
     . /opt/ros/"$ROS_DISTRO"/setup.sh && \
     . /ros2_caret_ws/install/local_setup.sh && \
     colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=Off -DCMAKE_CXX_FLAGS="-w"
-
-# --- check disk usage 4: after Autoware built
-RUN echo "===== DISK USAGE AFTER AUTOWARE BUILD (Check Final Build Cache) =====" && \
-    df -h && \
-    du -sh autoware/* ros2_caret_ws/*
 
 RUN echo "===== Verify Build ====="
 RUN cd autoware && \

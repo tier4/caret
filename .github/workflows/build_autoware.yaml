@@ -14,55 +14,14 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: 1. Measure disk usage BEFORE cleanup
-        run: |
-          echo "--- TOP 10 DIRS BEFORE CLEANUP ---"
-          sudo du -shx /* 2>/dev/null | sort -rh | head -10
-          echo "--- TOP 10 /var BEFORE CLEANUP ---"
-          sudo du -h /var/ | sort -rh | head -10
-          echo "--- TOP 10 /usr BEFORE CLEANUP ---"
-          sudo du -h /usr/ | sort -rh | head -10
-
       - name: Clean up disk space
         run: |
-          df -h # before disk cleanup
           sudo apt-get autoremove -y
           sudo apt-get clean
           sudo rm -rf /usr/share/dotnet
           docker system prune -a -f --volumes || true
-          df -h # after disk cleanup
-
-      - name: 2. Measure disk usage AFTER cleanup
-        run: |
-          echo "--- TOP 10 DIRS AFTER CLEANUP ---"
-          sudo du -shx /* 2>/dev/null | sort -rh | head -10
-          echo "--- TOP 10 /var AFTER CLEANUP ---"
-          sudo du -h /var/ | sort -rh | head -10
-          echo "--- TOP 10 /usr AFTER CLEANUP ---"
-          sudo du -h /usr/ | sort -rh | head -10
 
       - name: Docker Build
         run: |
           docker pull osrf/ros:humble-desktop
           docker image build --no-cache=true -t caret/caret_autoware:latest -f ./docker/build_autoware.dockerfile ./
-
-      - name: Analyze Docker Image Size
-        run: |
-          echo "--- Docker Image Layer Sizes inspect ---"
-          docker inspect --format='{{range .RootFS.Layers}}
-          Layer ID: {{.Digest}}
-          Size: {{.Size}} bytes
-          {{end}}' caret/caret_autoware:latest
-
-          echo "--- Docker Image Layer Sizes history ---"
-          COLUMNS=200 docker history caret/caret_autoware:latest
-
-      - name: 3. Measure disk usage AFTER build
-        run: |
-          echo "--- TOP 10 DIRS AFTER BUILD ---"
-          sudo du -shx /* 2>/dev/null | sort -rh | head -10
-          echo "--- TOP 10 /var AFTER BUILD ---"
-          sudo du -h /var/ | sort -rh | head -10
-          echo "--- TOP 10 /usr AFTER BUILD ---"
-          sudo du -h /usr/ | sort -rh | head -10
-          df -h # after build
