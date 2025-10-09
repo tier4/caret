@@ -42,6 +42,10 @@ RUN git clone https://github.com/autowarefoundation/autoware.git && \
 # install ros-humble-pacmod3-msgs manually because rosdep tries to install ros-galactic-pacmod3-msgs
 # remove gpg because build error happens in ad_api_visualizers for some reasons...
 
+# workaround: remove agnocast because CARET doesn't support Agnocast yet and Agnocast is not used by default
+RUN rm -rf autoware/src/middleware/external/agnocast
+RUN rm -rf autoware/src/universe/autoware_universe/common/autoware_agnocast_wrapper
+
 # https://github.com/ament/ament_cmake/commit/799183ab9bcfd9b66df0de9b644abaf8c9b78e84
 RUN echo "===== Modify ament_cmake_auto as workaround ====="
 RUN cd /opt/ros/humble/share/ament_cmake_auto/cmake && \
