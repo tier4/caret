@@ -14,6 +14,13 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Clean up disk space
+        run: |
+          sudo apt-get autoremove -y
+          sudo apt-get clean
+          sudo rm -rf /usr/share/dotnet
+          docker system prune -a -f --volumes || true
+
       - name: Docker Build
         run: |
           docker pull osrf/ros:humble-desktop
