@@ -11,6 +11,7 @@ RUN apt-get update -y && \
     rm -rf /var/lib/apt/lists/*
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
+ENV TZ Asia/Tokyo
 ENV ROS_DISTRO humble
 
 # Do not use cache
