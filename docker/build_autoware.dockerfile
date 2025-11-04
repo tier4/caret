@@ -23,7 +23,7 @@ RUN echo "===== GET CARET ====="
 COPY ./ /ros2_caret_ws
 
 # cspell: disable
-RUN apt update && apt install -y git &&
+RUN apt update && apt install -y git && \
     apt-get install -y tzdata && \
     ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
     dpkg-reconfigure --frontend noninteractive tzdata
