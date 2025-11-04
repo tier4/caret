@@ -13,6 +13,7 @@ RUN locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV TZ=Asia/Tokyo
 ENV ROS_DISTRO=humble
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Do not use cache
 ADD "https://www.random.org/sequences/?min=1&max=52&col=1&format=plain&rnd=new" /dev/null
