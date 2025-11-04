@@ -10,9 +10,9 @@ RUN apt-get update -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 RUN locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV TZ Asia/Tokyo
-ENV ROS_DISTRO humble
+ENV LANG=en_US.UTF-8
+ENV TZ=Asia/Tokyo
+ENV ROS_DISTRO=humble
 
 # Do not use cache
 ADD "https://www.random.org/sequences/?min=1&max=52&col=1&format=plain&rnd=new" /dev/null
