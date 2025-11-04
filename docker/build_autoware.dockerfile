@@ -22,7 +22,10 @@ RUN echo "===== GET CARET ====="
 #     git checkout "$CARET_VERSION"
 COPY ./ /ros2_caret_ws
 
-RUN apt update && apt install -y git
+RUN apt update && apt install -y git &&
+    apt-get install -y tzdata && \
+    ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
+    dpkg-reconfigure --frontend noninteractive tzdata
 
 RUN echo "===== Setup Autoware ====="
 RUN git clone https://github.com/autowarefoundation/autoware.git && \
