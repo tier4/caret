@@ -3,15 +3,18 @@ FROM ubuntu:22.04
 ARG CARET_VERSION="main"
 ARG AUTOWARE_VERSION="main"
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get update -y && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    apt-get install -y --no-install-recommends \
         locales \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 RUN locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV ROS_DISTRO humble
+ENV LANG=en_US.UTF-8
+ENV TZ=Asia/Tokyo
+ENV ROS_DISTRO=humble
 
 # Do not use cache
 ADD "https://www.random.org/sequences/?min=1&max=52&col=1&format=plain&rnd=new" /dev/null
@@ -22,22 +25,27 @@ RUN echo "===== GET CARET ====="
 #     git checkout "$CARET_VERSION"
 COPY ./ /ros2_caret_ws
 
-RUN apt update && apt install -y git
+# cspell: disable
+RUN apt update && apt install -y git && \
+    apt-get install -y tzdata && \
+    ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
+    dpkg-reconfigure --frontend noninteractive tzdata
+# cspell: enable
 
 RUN echo "===== Setup Autoware ====="
 RUN git clone https://github.com/autowarefoundation/autoware.git && \
     cd autoware && \
     git checkout "$AUTOWARE_VERSION" && \
-    DEBIAN_FRONTEND=noninteractive apt install python3.10-venv -y && \
+    apt install python3.10-venv -y && \
     ./setup-dev-env.sh -y --no-nvidia --no-cuda-drivers && \
     mkdir src && \
     vcs import src < autoware.repos && \
     vcs export --exact src && \
     . /opt/ros/"$ROS_DISTRO"/setup.sh && \
     rosdep update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y ros-humble-pacmod3-msgs=1.0.0-0jammy && \
-    DEBIAN_FRONTEND=noninteractive apt-get remove -y python3-gpg && \
-    DEBIAN_FRONTEND=noninteractive rosdep install -y --from-paths src --ignore-src --rosdistro "$ROS_DISTRO"
+    apt-get install -y ros-humble-pacmod3-msgs=1.0.0-0jammy && \
+    apt-get remove -y python3-gpg && \
+    rosdep install -y --from-paths src --ignore-src --rosdistro "$ROS_DISTRO"
 # workarounds:
 # install ros-humble-pacmod3-msgs manually because rosdep tries to install ros-galactic-pacmod3-msgs
 # remove gpg because build error happens in ad_api_visualizers for some reasons...
