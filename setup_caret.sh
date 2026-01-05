@@ -132,6 +132,20 @@ else
     exit 1
 fi
 
+# Checking CycloneDDS configuration
+CHECK_FILE="src/eclipse-cyclonedds/cyclonedds/src/core/CMakeLists.txt"
+if [ -f "$CHECK_FILE" ]; then
+    if grep -q "^set_property(TARGET ddsc PROPERTY C_VISIBILITY_PRESET hidden)" "$CHECK_FILE"; then
+        echo "Warning: Symbols are still hidden. Fixing now..."
+        sed -i "s/^set_property(TARGET ddsc PROPERTY C_VISIBILITY_PRESET hidden)/\# &/" "$CHECK_FILE"
+    else
+        echo "OK: Symbols are already unhidden."
+    fi
+else
+    echo "Error: CycloneDDS source not found. Did you run 'vcs import'?"
+    exit 1
+fi
+
 # Add PATH
 grep -Fxq "export PATH=\$PATH:$HOME/.local/bin" "$HOME/.bashrc" || {
     echo "export PATH=\$PATH:$HOME/.local/bin" >>"$HOME/.bashrc"
