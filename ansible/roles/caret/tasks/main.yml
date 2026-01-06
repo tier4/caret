@@ -32,7 +32,6 @@
       - ros-{{ rosdistro }}-performance-test-fixture
       - ros-{{ rosdistro }}-mimick-vendor
       - ros-{{ rosdistro }}-test-msgs
-      - ros-{{ rosdistro }}-cyclonedds
   become: true
 
 - name: caret (install python module)
