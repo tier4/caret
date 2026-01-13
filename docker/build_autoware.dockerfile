@@ -38,8 +38,8 @@ RUN git clone https://github.com/autowarefoundation/autoware.git && \
     git checkout "$AUTOWARE_VERSION" && \
     apt install python3.10-venv -y && \
     ./setup-dev-env.sh -y --no-nvidia --no-cuda-drivers && \
-    mkdir src && \
-    vcs import src < autoware.repos && \
+    mkdir -p src && \
+    vcs import src < repositories/autoware.repos && \
     vcs export --exact src && \
     . /opt/ros/"$ROS_DISTRO"/setup.sh && \
     rosdep update && \
