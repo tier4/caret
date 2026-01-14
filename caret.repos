@@ -6,7 +6,8 @@ repositories:
   ros2/rclcpp:
     type: git
     url: https://github.com/tier4/rclcpp.git
-    version: t4-main-caret
+    # version: t4-main-caret
+    version: 4a026d540b0a26bb7202e9cd4426bfd8ed372d61
   ros-tracing/ros2_tracing:
     type: git
     url: https://github.com/tier4/ros2_tracing.git
