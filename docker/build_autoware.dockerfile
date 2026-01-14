@@ -38,17 +38,12 @@ RUN git clone https://github.com/autowarefoundation/autoware.git && \
     git checkout "$AUTOWARE_VERSION" && \
     apt install python3.10-venv -y && \
     ./setup-dev-env.sh -y --no-nvidia --no-cuda-drivers && \
-    mkdir src && \
-    vcs import src < autoware.repos && \
+    mkdir -p src && \
+    vcs import src < repositories/autoware.repos && \
     vcs export --exact src && \
     . /opt/ros/"$ROS_DISTRO"/setup.sh && \
     rosdep update && \
-    apt-get install -y ros-humble-pacmod3-msgs=1.0.0-0jammy && \
-    apt-get remove -y python3-gpg && \
     rosdep install -y --from-paths src --ignore-src --rosdistro "$ROS_DISTRO"
-# workarounds:
-# install ros-humble-pacmod3-msgs manually because rosdep tries to install ros-galactic-pacmod3-msgs
-# remove gpg because build error happens in ad_api_visualizers for some reasons...
 
 # workaround: remove agnocast because CARET doesn't support Agnocast yet and Agnocast is not used by default
 RUN rm -rf autoware/src/middleware/external/agnocast
