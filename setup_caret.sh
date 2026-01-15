@@ -132,6 +132,16 @@ else
     exit 1
 fi
 
+# Ensure symbol visibility in CycloneDDS by comment out the hidden preset
+CHECK_FILE="src/eclipse-cyclonedds/cyclonedds/src/core/CMakeLists.txt"
+if [ -f "$CHECK_FILE" ]; then
+    sed -i "s/^set_property(TARGET ddsc PROPERTY C_VISIBILITY_PRESET hidden)/\# &/" "$CHECK_FILE"
+    echo "CycloneDDS configuration checked: Symbols unhidden successfully."
+else
+    echo "Error: CycloneDDS source not found. Did you run 'vcs import'?"
+    exit 1
+fi
+
 # Add PATH
 grep -Fxq "export PATH=\$PATH:$HOME/.local/bin" "$HOME/.bashrc" || {
     echo "export PATH=\$PATH:$HOME/.local/bin" >>"$HOME/.bashrc"

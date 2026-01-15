@@ -1,21 +1,21 @@
-- name: ROS2 (check rosdep file)
+- name: ROS 2 (check rosdep file)
   stat:
     path: /etc/ros/rosdep/sources.list.d/20-default.list
   register: ros_repository
 
-- name: ROS2 (install rosdep)
+- name: ROS 2 (install rosdep)
   apt:
     name: python3-rosdep
     state: latest
     update_cache: true
   become: true
 
-- name: ROS2 (initialize rosdep)
+- name: ROS 2 (initialize rosdep)
   command: rosdep init
   when: ros_repository.stat.exists == false
   become: true
 
-- name: ROS2 (update rosdep)
+- name: ROS 2 (update rosdep)
   command: rosdep update
   become: false
 
@@ -32,7 +32,6 @@
       - ros-{{ rosdistro }}-performance-test-fixture
       - ros-{{ rosdistro }}-mimick-vendor
       - ros-{{ rosdistro }}-test-msgs
-      - ros-{{ rosdistro }}-cyclonedds
   become: true
 
 - name: caret (install python module)
