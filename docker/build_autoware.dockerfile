@@ -32,18 +32,25 @@ RUN apt update && apt install -y git && \
     dpkg-reconfigure --frontend noninteractive tzdata
 # cspell: enable
 
+COPY docker/scripts/resolve_rosdep_keys.sh /autoware/resolve_rosdep_keys.sh
+RUN chmod +x /autoware/resolve_rosdep_keys.sh
+
 RUN echo "===== Setup Autoware ====="
 RUN git clone https://github.com/autowarefoundation/autoware.git && \
     cd autoware && \
     git checkout "$AUTOWARE_VERSION" && \
-    apt install python3.10-venv -y && \
+    apt-get update && \
+    apt-get install python3.10-venv -y && \
     ./setup-dev-env.sh -y --no-nvidia --no-cuda-drivers && \
     mkdir -p src && \
     vcs import src < repositories/autoware.repos && \
     vcs export --exact src && \
     . /opt/ros/"$ROS_DISTRO"/setup.sh && \
     rosdep update && \
-    rosdep install -y --from-paths src --ignore-src --rosdistro "$ROS_DISTRO"
+    /autoware/resolve_rosdep_keys.sh src "${ROS_DISTRO}" > /tmp/rosdep-list.txt && \
+    apt-get update && \
+    cat /tmp/rosdep-list.txt | xargs apt-get install -y --no-install-recommends && \
+    rm /tmp/rosdep-list.txt
 
 # workaround: remove agnocast because CARET doesn't support Agnocast yet and Agnocast is not used by default
 RUN rm -rf autoware/src/middleware/external/agnocast
