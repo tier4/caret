@@ -32,25 +32,35 @@ RUN apt update && apt install -y git && \
     dpkg-reconfigure --frontend noninteractive tzdata
 # cspell: enable
 
-COPY docker/scripts/resolve_rosdep_keys.sh /autoware/resolve_rosdep_keys.sh
-RUN chmod +x /autoware/resolve_rosdep_keys.sh
-
-RUN echo "===== Setup Autoware ====="
-RUN git clone https://github.com/autowarefoundation/autoware.git && \
+RUN echo "===== Setup Autoware =====" && \
+    git clone https://github.com/autowarefoundation/autoware.git && \
     cd autoware && \
-    git checkout "$AUTOWARE_VERSION" && \
+    git checkout "${AUTOWARE_VERSION}" && \
+    mkdir -p /autoware && \
+    cp docker/scripts/resolve_rosdep_keys.sh /autoware/resolve_rosdep_keys.sh && \
+    chmod +x /autoware/resolve_rosdep_keys.sh && \
     apt-get update && \
     apt-get install python3.10-venv -y && \
     ./setup-dev-env.sh -y --no-nvidia --no-cuda-drivers && \
     mkdir -p src && \
     vcs import src < repositories/autoware.repos && \
     vcs export --exact src && \
-    . /opt/ros/"$ROS_DISTRO"/setup.sh && \
+    . /opt/ros/"${ROS_DISTRO}"/setup.sh && \
     rosdep update && \
-    /autoware/resolve_rosdep_keys.sh src "${ROS_DISTRO}" > /tmp/rosdep-list.txt && \
-    apt-get update && \
-    cat /tmp/rosdep-list.txt | xargs apt-get install -y --no-install-recommends && \
-    rm /tmp/rosdep-list.txt
+    /autoware/resolve_rosdep_keys.sh src "${ROS_DISTRO:-humble}" > /tmp/rosdep-list.txt || true && \
+    if [ -f /tmp/rosdep-list.txt ]; then \
+        sed -i '/^$/d' /tmp/rosdep-list.txt; \
+    fi && \
+    if [ -s /tmp/rosdep-list.txt ]; then \
+        echo "===== Resolved dependencies =====" && \
+        cat /tmp/rosdep-list.txt && \
+        apt-get update && \
+        cat /tmp/rosdep-list.txt | xargs apt-get install -y --no-install-recommends; \
+    else \
+        echo "ERROR: rosdep-list.txt is empty. Dependency resolution failed!" && \
+        exit 1; \
+    fi && \
+    rm -f /tmp/rosdep-list.txt
 
 # workaround: remove agnocast because CARET doesn't support Agnocast yet and Agnocast is not used by default
 RUN rm -rf autoware/src/middleware/external/agnocast
