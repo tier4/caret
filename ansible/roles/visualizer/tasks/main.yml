@@ -10,7 +10,7 @@
   pip:
     requirements: "{{ requirements_path }}"
     executable: pip3
-    extra_args: --ignore-installed
+    extra_args: --ignore-installed "{{ '--break-system-packages' if ansible_distribution_version >= '24.04' else '' }}"
   become: false
   args:
     chdir: "{{ WORKSPACE_ROOT }}"

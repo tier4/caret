@@ -97,7 +97,7 @@ fi
 # Run ansible if confirmed
 # Install ansible
 if [ "$ros_distro" = "jazzy" ]; then
-    pip3 install -U ansible
+    pip3 install -U ansible --break-system-packages
 else
     ansible_version=$(pip3 list | grep -oP "^ansible\s+\K([0-9]+)" || true)
     if [ "$ansible_version" != "6" ]; then
