@@ -46,6 +46,7 @@ RUN cd ros2_caret_ws && \
         REPOS_FILE=caret_iron.repos ; \
     elif [ "$ROS_DISTRO" = "jazzy" ]; then \
         REPOS_FILE=caret_jazzy.repos ; \
+        export PIP_BREAK_SYSTEM_PACKAGES=1 ; \
     else \
         echo "Unsupported ROS_DISTRO: $ROS_DISTRO" && exit 1 ; \
     fi && \
