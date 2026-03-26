@@ -14,8 +14,7 @@ repositories:
   CARET/ros2caret:
     type: git
     url: https://github.com/tier4/ros2caret.git
-    version: v0.7.3
-  # Dependency for CI/CD
+    version: for-evaluator
   CARET/caret_common:
     type: git
     url: https://github.com/tier4/caret_common.git
