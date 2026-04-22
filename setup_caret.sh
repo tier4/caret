@@ -11,7 +11,7 @@ function show_usage() {
     echo "    -h or --help: show help message"
     echo "    -c or --no-interactive"
     echo "    -n or --no-package-install"
-    echo "    -p or --no-pip-install"
+    echo "    -p or --no-pip-install  (skip pip installs in ansible playbooks; ansible itself is still installed via pip as a prerequisite)"
     echo "    -d or --ros-distro"
     echo ""
     echo "Required for ROS 2 Jazzy (Ubuntu 24.04+):"
