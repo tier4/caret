@@ -12,6 +12,7 @@
   become: false
   args:
     chdir: "{{ WORKSPACE_ROOT }}"
+  when: pip_install | default('y') == 'y'
 
 - name: Install ros-tracing
   apt:

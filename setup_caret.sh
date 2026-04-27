@@ -11,6 +11,7 @@ function show_usage() {
     echo "    -h or --help: show help message"
     echo "    -c or --no-interactive"
     echo "    -n or --no-package-install"
+    echo "    -p or --no-pip-install  (skip pip installs in ansible playbooks; ansible itself is still installed via pip as a prerequisite)"
     echo "    -d or --ros-distro"
     echo ""
     echo "Required for ROS 2 Jazzy (Ubuntu 24.04+):"
@@ -30,13 +31,14 @@ function validate_ros_distro() {
 }
 
 # parse command options.
-OPT=$(getopt -o nchd: -l no-interactive,no-package-install,help,ros-distro: -- "$@") # cSpell:ignore nchd
+OPT=$(getopt -o nphcd: -l no-interactive,no-package-install,no-pip-install,help,ros-distro: -- "$@") # cSpell:ignore nphcd
 
 eval set -- "$OPT"
 
 # Parse args
 noninteractive=0
 package_install=1
+pip_install=1
 ros_distro=humble
 
 while true; do
@@ -50,6 +52,10 @@ while true; do
         ;;
     -n | --no-package-install)
         package_install=0
+        shift
+        ;;
+    -p | --no-pip-install)
+        pip_install=0
         shift
         ;;
     -d | --ros-distro)
@@ -131,12 +137,22 @@ else
 fi
 
 # Set options
+declare -a options=()
+
 if [ $noninteractive -eq 0 ]; then
     options=("--ask-become-pass")
 fi
 
 if [ $package_install -eq 0 ]; then
-    options=("--extra-vars" "package_install=n")
+    options+=("--extra-vars" "package_install=n")
+elif [ $noninteractive -eq 1 ]; then
+    options+=("--extra-vars" "package_install=y")
+fi
+
+if [ $pip_install -eq 0 ]; then
+    options+=("--extra-vars" "pip_install=n")
+elif [ $noninteractive -eq 1 ]; then
+    options+=("--extra-vars" "pip_install=y")
 fi
 
 # Select playbook

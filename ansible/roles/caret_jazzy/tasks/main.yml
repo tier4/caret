@@ -42,6 +42,7 @@
   become: false
   args:
     chdir: "{{ WORKSPACE_ROOT }}"
+  when: pip_install | default('y') == 'y'
 
 - name: caret (copy CARET setenv template as reference)
   ansible.builtin.template:
