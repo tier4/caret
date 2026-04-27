@@ -6,6 +6,10 @@
       prompt: Would you like to install the require packages[y/n]
       default: y
       private: false
+    - name: pip_install
+      prompt: Would you like to run pip install[y/n]
+      default: y
+      private: false
   pre_tasks:
     - name: Verify OS
       ansible.builtin.fail:
