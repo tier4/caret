@@ -174,7 +174,7 @@ fi
 # Ensure symbol visibility in CycloneDDS by comment out the hidden preset
 CHECK_FILE="src/eclipse-cyclonedds/cyclonedds/src/core/CMakeLists.txt"
 if [ -f "$CHECK_FILE" ]; then
-###    sed -i "s/^set_property(TARGET ddsc PROPERTY C_VISIBILITY_PRESET hidden)/\# &/" "$CHECK_FILE"
+    ###    sed -i "s/^set_property(TARGET ddsc PROPERTY C_VISIBILITY_PRESET hidden)/\# &/" "$CHECK_FILE"
     echo "CycloneDDS configuration checked: Symbols unhidden successfully."
 else
     echo "Error: CycloneDDS source not found. Did you run 'vcs import'?"
