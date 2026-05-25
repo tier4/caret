@@ -32,6 +32,9 @@
       - ros-{{ rosdistro }}-performance-test-fixture
       - ros-{{ rosdistro }}-mimick-vendor
       - ros-{{ rosdistro }}-test-msgs
+      - ros-{{ rosdistro }}-ros2trace
+      - ros-{{ rosdistro }}-ros2trace-analysis
+      - ros-{{ rosdistro }}-tracetools
   become: true
 
 - name: caret (install python module)
