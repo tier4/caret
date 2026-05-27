@@ -18,6 +18,5 @@
 
   roles:
     - { role: lttng, tags: [lttng], when: package_install == 'y' }
-    - { role: ros-tracing, rosdistro: iron, tags: [ros-tracing], when: package_install == 'y' }
     - { role: visualizer, tags: [visualizer], when: package_install == 'y' }
     - { role: caret_iron, rosdistro: iron, tags: [caret] }
