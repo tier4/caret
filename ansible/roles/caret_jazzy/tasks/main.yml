@@ -17,7 +17,7 @@
 
 - name: ROS 2 (update rosdep)
   command: rosdep update
-  become: false
+  become: true
 
 - name: caret (rosdep install dependencies)
   shell: |
