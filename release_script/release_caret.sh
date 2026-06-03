@@ -160,7 +160,7 @@ ${DRY_RUN} git checkout -b rc/"${TAG_ID}"
 for DISTRO in humble iron jazzy; do
     TEMPLATE_FILE="${SCRIPT_DIR}/template_caret_${DISTRO}.repos"
     OUTPUT_FILE="${ROOT_DIR}/caret_${DISTRO}.repos"
-    
+
     # For humble, also create caret.repos for backward compatibility
     if [ "${DISTRO}" == "humble" ]; then
         ${DRY_RUN} cp "${TEMPLATE_FILE}" "${ROOT_DIR}"/caret.repos
@@ -171,7 +171,7 @@ for DISTRO in humble iron jazzy; do
         ${DRY_RUN} sed -i -e "s/TOPIC_TOOLS_HASH/${TOPIC_TOOLS_HASH}/g" "${ROOT_DIR}"/caret.repos
         ${DRY_RUN} sed -i -e "s/CARET_TAG/${TAG_ID}/g" "${ROOT_DIR}"/caret.repos
     fi
-    
+
     # Create distro-specific repos file
     ${DRY_RUN} cp "${TEMPLATE_FILE}" "${OUTPUT_FILE}"
     ${DRY_RUN} sed -i -e "s/ROS_TRACING_HASH/${ROS_TRACING_HASH}/g" "${OUTPUT_FILE}"
