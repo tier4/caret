@@ -156,34 +156,47 @@ TOPIC_TOOLS_HASH=$(get_hash_from_repository "${ROOT_DIR}"/${TOPIC_TOOLS_PATH})
 # checkout caret repository.
 ${DRY_RUN} git checkout -b rc/"${TAG_ID}"
 
-# copy caret repos and edit as pointing specific tag and hash.
+# setup caret.repos for each distribution by copying template file
 for DISTRO in humble iron jazzy; do
-    TEMPLATE_FILE="${SCRIPT_DIR}/template_caret_${DISTRO}.repos"
-    OUTPUT_FILE="${ROOT_DIR}/caret_${DISTRO}.repos"
-
-    # For humble, also create caret.repos for backward compatibility
-    if [ "${DISTRO}" == "humble" ]; then
-        ${DRY_RUN} cp "${TEMPLATE_FILE}" "${ROOT_DIR}"/caret.repos
-        ${DRY_RUN} sed -i -e "s/ROS_TRACING_HASH/${ROS_TRACING_HASH}/g" "${ROOT_DIR}"/caret.repos
-        ${DRY_RUN} sed -i -e "s/RCLCPP_HASH/${ROS_RCLCPP_HASH}/g" "${ROOT_DIR}"/caret.repos
-        ${DRY_RUN} sed -i -e "s/RCL_HASH/${ROS_RCL_HASH}/g" "${ROOT_DIR}"/caret.repos
-        ${DRY_RUN} sed -i -e "s/CYCLONEDDS_HASH/${CYCLONEDDS_HASH}/g" "${ROOT_DIR}"/caret.repos
-        ${DRY_RUN} sed -i -e "s/TOPIC_TOOLS_HASH/${TOPIC_TOOLS_HASH}/g" "${ROOT_DIR}"/caret.repos
-        ${DRY_RUN} sed -i -e "s/CARET_TAG/${TAG_ID}/g" "${ROOT_DIR}"/caret.repos
+    if [ "$DISTRO" == "humble" ]; then
+        TEMPLATE="${SCRIPT_DIR}/template_caret_humble.repos"
+        OUTPUT="${ROOT_DIR}/caret.repos"
+    elif [ "$DISTRO" == "iron" ]; then
+        TEMPLATE="${SCRIPT_DIR}/template_caret_iron.repos"
+        OUTPUT="${ROOT_DIR}/caret_iron.repos"
+    else # jazzy
+        TEMPLATE="${SCRIPT_DIR}/template_caret_jazzy.repos"
+        OUTPUT="${ROOT_DIR}/caret_jazzy.repos"
     fi
-
-    # Create distro-specific repos file
-    ${DRY_RUN} cp "${TEMPLATE_FILE}" "${OUTPUT_FILE}"
-    ${DRY_RUN} sed -i -e "s/ROS_TRACING_HASH/${ROS_TRACING_HASH}/g" "${OUTPUT_FILE}"
-    ${DRY_RUN} sed -i -e "s/RCLCPP_HASH/${ROS_RCLCPP_HASH}/g" "${OUTPUT_FILE}"
-    ${DRY_RUN} sed -i -e "s/RCL_HASH/${ROS_RCL_HASH}/g" "${OUTPUT_FILE}"
-    ${DRY_RUN} sed -i -e "s/CYCLONEDDS_HASH/${CYCLONEDDS_HASH}/g" "${OUTPUT_FILE}"
-    ${DRY_RUN} sed -i -e "s/TOPIC_TOOLS_HASH/${TOPIC_TOOLS_HASH}/g" "${OUTPUT_FILE}"
-    ${DRY_RUN} sed -i -e "s/CARET_TAG/${TAG_ID}/g" "${OUTPUT_FILE}"
+    # check if template file exists
+    if [ ! -f "${TEMPLATE}" ]; then
+        echo "Error: Template file ${TEMPLATE} not found."
+        exit 1
+    fi
+    # copy caret repos and edit as pointing specific tag and hash for each distribution.
+    if [ "${DRY_RUN}" == "echo" ]; then
+        echo "--- [Dry-run] Expected output for ${OUTPUT} ---"
+        # print repository and hash information
+        sed -e "s/ROS_TRACING_HASH/${ROS_TRACING_HASH}/g" \
+            -e "s/RCLCPP_HASH/${ROS_RCLCPP_HASH}/g" \
+            -e "s/RCL_HASH/${ROS_RCL_HASH}/g" \
+            -e "s/CYCLONEDDS_HASH/${CYCLONEDDS_HASH}/g" \
+            -e "s/TOPIC_TOOLS_HASH/${TOPIC_TOOLS_HASH}/g" \
+            -e "s/CARET_TAG/${TAG_ID}/g" "${TEMPLATE}"
+    else
+        # create repos file
+        cp "${TEMPLATE}" "${OUTPUT}"
+        sed -i -e "s/ROS_TRACING_HASH/${ROS_TRACING_HASH}/g" "${OUTPUT}"
+        sed -i -e "s/RCLCPP_HASH/${ROS_RCLCPP_HASH}/g" "${OUTPUT}"
+        sed -i -e "s/RCL_HASH/${ROS_RCL_HASH}/g" "${OUTPUT}"
+        sed -i -e "s/CYCLONEDDS_HASH/${CYCLONEDDS_HASH}/g" "${OUTPUT}"
+        sed -i -e "s/TOPIC_TOOLS_HASH/${TOPIC_TOOLS_HASH}/g" "${OUTPUT}"
+        sed -i -e "s/CARET_TAG/${TAG_ID}/g" "${OUTPUT}"
+        git add "${OUTPUT}"
+    fi
 done
 
-${DRY_RUN} git add "${ROOT_DIR}"/caret*.repos
-${DRY_RUN} git commit -m "release(caret*.repos): change version of sub repositories for ${TAG_ID}"
+${DRY_RUN} git commit -m "release(caret.repos): change version of sub repositories for ${TAG_ID} (Humble/Iron/Jazzy)"
 
 ${DRY_RUN} git tag "${TAG_ID}"
 
