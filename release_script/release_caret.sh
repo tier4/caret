@@ -157,16 +157,33 @@ TOPIC_TOOLS_HASH=$(get_hash_from_repository "${ROOT_DIR}"/${TOPIC_TOOLS_PATH})
 ${DRY_RUN} git checkout -b rc/"${TAG_ID}"
 
 # copy caret repos and edit as pointing specific tag and hash.
-${DRY_RUN} cp "${SCRIPT_DIR}"/template_caret.repos "${ROOT_DIR}"/caret.repos
-${DRY_RUN} sed -i -e "s/ROS_TRACING_HASH/${ROS_TRACING_HASH}/g" "${ROOT_DIR}"/caret.repos
-${DRY_RUN} sed -i -e "s/RCLCPP_HASH/${ROS_RCLCPP_HASH}/g" "${ROOT_DIR}"/caret.repos
-${DRY_RUN} sed -i -e "s/RCL_HASH/${ROS_RCL_HASH}/g" "${ROOT_DIR}"/caret.repos
-${DRY_RUN} sed -i -e "s/CYCLONEDDS_HASH/${CYCLONEDDS_HASH}/g" "${ROOT_DIR}"/caret.repos
-${DRY_RUN} sed -i -e "s/TOPIC_TOOLS_HASH/${TOPIC_TOOLS_HASH}/g" "${ROOT_DIR}"/caret.repos
-${DRY_RUN} sed -i -e "s/CARET_TAG/${TAG_ID}/g" "${ROOT_DIR}"/caret.repos
+for DISTRO in humble iron jazzy; do
+    TEMPLATE_FILE="${SCRIPT_DIR}/template_caret_${DISTRO}.repos"
+    OUTPUT_FILE="${ROOT_DIR}/caret_${DISTRO}.repos"
+    
+    # For humble, also create caret.repos for backward compatibility
+    if [ "${DISTRO}" == "humble" ]; then
+        ${DRY_RUN} cp "${TEMPLATE_FILE}" "${ROOT_DIR}"/caret.repos
+        ${DRY_RUN} sed -i -e "s/ROS_TRACING_HASH/${ROS_TRACING_HASH}/g" "${ROOT_DIR}"/caret.repos
+        ${DRY_RUN} sed -i -e "s/RCLCPP_HASH/${ROS_RCLCPP_HASH}/g" "${ROOT_DIR}"/caret.repos
+        ${DRY_RUN} sed -i -e "s/RCL_HASH/${ROS_RCL_HASH}/g" "${ROOT_DIR}"/caret.repos
+        ${DRY_RUN} sed -i -e "s/CYCLONEDDS_HASH/${CYCLONEDDS_HASH}/g" "${ROOT_DIR}"/caret.repos
+        ${DRY_RUN} sed -i -e "s/TOPIC_TOOLS_HASH/${TOPIC_TOOLS_HASH}/g" "${ROOT_DIR}"/caret.repos
+        ${DRY_RUN} sed -i -e "s/CARET_TAG/${TAG_ID}/g" "${ROOT_DIR}"/caret.repos
+    fi
+    
+    # Create distro-specific repos file
+    ${DRY_RUN} cp "${TEMPLATE_FILE}" "${OUTPUT_FILE}"
+    ${DRY_RUN} sed -i -e "s/ROS_TRACING_HASH/${ROS_TRACING_HASH}/g" "${OUTPUT_FILE}"
+    ${DRY_RUN} sed -i -e "s/RCLCPP_HASH/${ROS_RCLCPP_HASH}/g" "${OUTPUT_FILE}"
+    ${DRY_RUN} sed -i -e "s/RCL_HASH/${ROS_RCL_HASH}/g" "${OUTPUT_FILE}"
+    ${DRY_RUN} sed -i -e "s/CYCLONEDDS_HASH/${CYCLONEDDS_HASH}/g" "${OUTPUT_FILE}"
+    ${DRY_RUN} sed -i -e "s/TOPIC_TOOLS_HASH/${TOPIC_TOOLS_HASH}/g" "${OUTPUT_FILE}"
+    ${DRY_RUN} sed -i -e "s/CARET_TAG/${TAG_ID}/g" "${OUTPUT_FILE}"
+done
 
-${DRY_RUN} git add "${ROOT_DIR}"/caret.repos
-${DRY_RUN} git commit -m "release(caret.repos): change version of sub repositories for ${TAG_ID}"
+${DRY_RUN} git add "${ROOT_DIR}"/caret*.repos
+${DRY_RUN} git commit -m "release(caret*.repos): change version of sub repositories for ${TAG_ID}"
 
 ${DRY_RUN} git tag "${TAG_ID}"
 
