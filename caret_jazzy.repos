@@ -2,24 +2,24 @@ repositories:
   CARET/caret_trace:
     type: git
     url: https://github.com/tier4/caret_trace.git
-    version: main
+    version: v0.7.3
   CARET/caret_analyze:
     type: git
     url: https://github.com/tier4/caret_analyze.git
-    version: main
+    version: v0.7.3
   CARET/caret_analyze_cpp_impl:
     type: git
     url: https://github.com/tier4/caret_analyze_cpp_impl.git
-    version: main
+    version: v0.7.3
   CARET/ros2caret:
     type: git
     url: https://github.com/tier4/ros2caret.git
-    version: main
+    version: v0.7.3
   # Dependency for CI/CD
   CARET/caret_common:
     type: git
     url: https://github.com/tier4/caret_common.git
-    version: main
+    version: v0.7.3
   eclipse-cyclonedds/cyclonedds:
     type: git
     url: https://github.com/eclipse-cyclonedds/cyclonedds.git
