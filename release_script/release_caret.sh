@@ -1,10 +1,9 @@
 #!/bin/bash
 
 # echo usage
-
 function show_usage() {
     echo "Warning: This script may break your repositories, please be careful to use $0"
-    echo "Usage: $0 [-h or --help"
+    echo "Usage: $0 [-h or --help]"
     echo "          [-d or --dry-run]"
     echo "          [-p or --push]"
     echo "          [-t or --tag tag-id]"
@@ -14,6 +13,11 @@ function show_usage() {
     echo "-d or --dry-run: run without any change. only message is displayed."
     echo "-p or --push:    push branch or tag to origin"
     echo "-t --tag:        tag id, which is to added repository. this is mandatory"
+    echo "Note:"
+    echo "  This script generates .repos files based on the current ROS_DISTRO."
+    echo "  Generating repos for older distributions (e.g., humble) in a newer"
+    echo "  environment (e.g., jazzy) is disabled, as the required external"
+    echo "  repository sources are not present to generate a valid hash."
 
     exit 0
 }
@@ -39,18 +43,8 @@ CARET_REPOS_ARRAY=("caret_trace"
     "ros2caret"
     "caret_common")
 
-# ros-tracing repository
-ROS_TRACING_REPOS="ros2_tracing"
-
-# rclcpp repository
-ROS_RCLCPP_REPOS="rclcpp"
-ROS_RCL_REPOS="rcl"
-
-# cyclonedds
-CYCLONEDDS_REPOS="cyclonedds"
-
-# topic_tools
-TOPIC_TOOLS_REPOS="topic_tools"
+# supported ROS2 distros
+SUPPORTED_DISTROS=("humble" "jazzy")
 
 # variables
 DRY_RUN=
@@ -124,87 +118,67 @@ for repos in "${CARET_REPOS_ARRAY[@]}"; do
     add_tag_to_caret_repository "${repos}" "${TAG_ID}"
 done
 
-# get tags from repository
+# repos generation loop
+for TEMPLATE in "${SCRIPT_DIR}"/template_caret_*.repos; do
+    FILENAME=$(basename "$TEMPLATE")
 
-function get_hash_from_repository() {
-    cd "${1}" || exit
-    HASH_ID=$(git rev-parse HEAD)
-    cd "${ROOT_DIR}" || exit
-    echo "${HASH_ID}"
-}
+    # get distro name from template file name (ex. template_caret_humble.repos -> humble)
+    TEMPLATE_DISTRO=$(echo "$FILENAME" | sed -E 's/template_caret_(.*)\.repos/\1/')
+    if [[ "$ROS_DISTRO" == "jazzy" && "$TEMPLATE_DISTRO" == "humble" ]]; then
+        echo "Skipping ${FILENAME} (Required external packages are missing in this workspace in the ${ROS_DISTRO} environment)."
+        continue
+    fi
+    # check if the distro is supported
+    if [[ ! " ${SUPPORTED_DISTROS[*]} " =~ " ${TEMPLATE_DISTRO} " ]]; then
+        continue
+    fi
 
-# get hash number from ros-tracing repos
-ROS_TRACING_PATH="src/ros-tracing/${ROS_TRACING_REPOS}"
-ROS_TRACING_HASH=$(get_hash_from_repository "${ROOT_DIR}"/${ROS_TRACING_PATH})
-
-# get hash number from rclcpp
-ROS_RCLCPP_PATH="src/ros2/${ROS_RCLCPP_REPOS}"
-ROS_RCLCPP_HASH=$(get_hash_from_repository "${ROOT_DIR}"/${ROS_RCLCPP_PATH})
-
-# get hash number from rcl
-ROS_RCL_PATH="src/ros2/${ROS_RCL_REPOS}"
-ROS_RCL_HASH=$(get_hash_from_repository "${ROOT_DIR}"/${ROS_RCL_PATH})
-
-# get hash number from cyclonedds
-CYCLONEDDS_PATH="src/eclipse-cyclonedds/${CYCLONEDDS_REPOS}"
-CYCLONEDDS_HASH=$(get_hash_from_repository "${ROOT_DIR}"/${CYCLONEDDS_PATH})
-
-# get hash number from topic_tools
-TOPIC_TOOLS_PATH="src/ros-tooling/${TOPIC_TOOLS_REPOS}"
-TOPIC_TOOLS_HASH=$(get_hash_from_repository "${ROOT_DIR}"/${TOPIC_TOOLS_PATH})
-
-# checkout caret repository.
-${DRY_RUN} git checkout -b rc/"${TAG_ID}"
-
-# setup caret.repos for each distribution by copying template file
-for DISTRO in humble iron jazzy; do
-    if [ "$DISTRO" == "humble" ]; then
-        TEMPLATE="${SCRIPT_DIR}/template_caret_humble.repos"
+    # select output file name (humble is caret.repos, others are caret_distro.repos)
+    if [ "$TEMPLATE_DISTRO" == "humble" ]; then
         OUTPUT="${ROOT_DIR}/caret.repos"
-    elif [ "$DISTRO" == "iron" ]; then
-        TEMPLATE="${SCRIPT_DIR}/template_caret_iron.repos"
-        OUTPUT="${ROOT_DIR}/caret_iron.repos"
-    else # jazzy
-        TEMPLATE="${SCRIPT_DIR}/template_caret_jazzy.repos"
-        OUTPUT="${ROOT_DIR}/caret_jazzy.repos"
-    fi
-    # check if template file exists
-    if [ ! -f "${TEMPLATE}" ]; then
-        echo "Error: Template file ${TEMPLATE} not found."
-        exit 1
-    fi
-    # copy caret repos and edit as pointing specific tag and hash for each distribution.
-    if [ "${DRY_RUN}" == "echo" ]; then
-        echo "--- [Dry-run] Expected output for ${OUTPUT} ---"
-        # print repository and hash information
-        sed -e "s/ROS_TRACING_HASH/${ROS_TRACING_HASH}/g" \
-            -e "s/RCLCPP_HASH/${ROS_RCLCPP_HASH}/g" \
-            -e "s/RCL_HASH/${ROS_RCL_HASH}/g" \
-            -e "s/CYCLONEDDS_HASH/${CYCLONEDDS_HASH}/g" \
-            -e "s/TOPIC_TOOLS_HASH/${TOPIC_TOOLS_HASH}/g" \
-            -e "s/CARET_TAG/${TAG_ID}/g" "${TEMPLATE}"
     else
-        # create repos file
-        cp "${TEMPLATE}" "${OUTPUT}"
-        sed -i -e "s/ROS_TRACING_HASH/${ROS_TRACING_HASH}/g" "${OUTPUT}"
-        sed -i -e "s/RCLCPP_HASH/${ROS_RCLCPP_HASH}/g" "${OUTPUT}"
-        sed -i -e "s/RCL_HASH/${ROS_RCL_HASH}/g" "${OUTPUT}"
-        sed -i -e "s/CYCLONEDDS_HASH/${CYCLONEDDS_HASH}/g" "${OUTPUT}"
-        sed -i -e "s/TOPIC_TOOLS_HASH/${TOPIC_TOOLS_HASH}/g" "${OUTPUT}"
-        sed -i -e "s/CARET_TAG/${TAG_ID}/g" "${OUTPUT}"
+        OUTPUT="${ROOT_DIR}/caret_${TEMPLATE_DISTRO}.repos"
+    fi
+    cp "${TEMPLATE}" "${OUTPUT}"
+
+    sed -i -e "s/CARET_TAG/${TAG_ID}/g" "${OUTPUT}"
+
+    declare -A MAP=(
+        ["ros2/rcl"]="RCL_HASH"
+        ["ros2/rclcpp"]="RCLCPP_HASH"
+        ["ros-tracing/ros2_tracing"]="ROS_TRACING_HASH"
+        ["eclipse-cyclonedds/cyclonedds"]="CYCLONEDDS_HASH"
+        ["ros-tooling/topic_tools"]="TOPIC_TOOLS_HASH"
+    )
+
+    for path in "${!MAP[@]}"; do
+        placeholder="${MAP[$path]}"
+        dir=""
+        [ -d "${ROOT_DIR}/src/${path}" ] && dir="${ROOT_DIR}/src/${path}"
+        [ -z "$dir" ] && [ -d "${ROOT_DIR}/${path}" ] && dir="${ROOT_DIR}/${path}"
+
+        if [ -d "$dir" ]; then
+            hash=$(git -C "$dir" rev-parse HEAD)
+            sed -i -e "s/${placeholder}/${hash}/g" "${OUTPUT}"
+        fi
+    done
+
+    if [ "${DRY_RUN}" == "echo" ]; then
+        ${DRY_RUN} "--------------------------------------------------------"
+        ${DRY_RUN} "Generating ${OUTPUT} from ${FILENAME} (Dry-run mode)..."
+        ${DRY_RUN} "--------------------------------------------------------"
+        cat "${OUTPUT}"
+    else
         git add "${OUTPUT}"
     fi
 done
 
-${DRY_RUN} git commit -m "release(caret.repos): change version of sub repositories for ${TAG_ID} (Humble/Iron/Jazzy)"
-
+${DRY_RUN} git commit -m "release(${OUTPUT}): update versions for ${TAG_ID}"
 ${DRY_RUN} git tag "${TAG_ID}"
 
 if [ "${PUSH_REMOTE}" == "true" ]; then
-    ${DRY_RUN} cd "${ROOT_DIR}" || exit
     ${DRY_RUN} git push origin rc/"${TAG_ID}"
     ${DRY_RUN} git push origin "${TAG_ID}"
-    ${DRY_RUN} cd "${SCRIPT_DIR}"
 fi
 
 echo "[Info] Completed release script."
