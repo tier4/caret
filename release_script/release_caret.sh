@@ -124,7 +124,7 @@ for TEMPLATE in "${SCRIPT_DIR}"/template_caret_*.repos; do
 
     # get distro name from template file name (ex. template_caret_humble.repos -> humble)
     TEMPLATE_DISTRO=$(echo "$FILENAME" | sed -E 's/template_caret_(.*)\.repos/\1/')
-    if [[ "$ROS_DISTRO" == "jazzy" && "$TEMPLATE_DISTRO" == "humble" ]]; then
+    if [[ $ROS_DISTRO == "jazzy" && $TEMPLATE_DISTRO == "humble" ]]; then
         echo "Skipping ${FILENAME} (Required external packages are missing in this workspace in the ${ROS_DISTRO} environment)."
         continue
     fi
