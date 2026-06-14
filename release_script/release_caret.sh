@@ -43,7 +43,7 @@ CARET_REPOS_ARRAY=("caret_trace"
     "ros2caret"
     "caret_common")
 
-# supported ROS2 distros
+# supported ROS 2 distros
 SUPPORTED_DISTROS=("humble" "jazzy")
 
 # variables
@@ -129,7 +129,7 @@ for TEMPLATE in "${SCRIPT_DIR}"/template_caret_*.repos; do
         continue
     fi
     # check if the distro is supported
-    if [[ ! " ${SUPPORTED_DISTROS[*]} " =~ " ${TEMPLATE_DISTRO} " ]]; then
+    if [[ ! " ${SUPPORTED_DISTROS[*]} " =~ ${TEMPLATE_DISTRO} ]]; then
         continue
     fi
 
