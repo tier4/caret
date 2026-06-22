@@ -167,15 +167,15 @@ for TEMPLATE in "${SCRIPT_DIR}"/template_caret_*.repos; do
 
         if [ -d "$dir" ]; then
             hash=$(git -C "$dir" rev-parse HEAD)
-	    sed -i -e "s/${placeholder}/${hash}/g" "${TARGET_FILE}"
+            sed -i -e "s/${placeholder}/${hash}/g" "${TARGET_FILE}"
         fi
     done
 
     if [ "${DRY_RUN}" == "echo" ]; then
         ${DRY_RUN} "--------------------------------------------------------"
-	${DRY_RUN} "Dry-run: Previewing generated ${OUTPUT} from ${FILENAME}"
+        ${DRY_RUN} "Dry-run: Previewing generated ${OUTPUT} from ${FILENAME}"
         ${DRY_RUN} "--------------------------------------------------------"
-	cat "${TARGET_FILE}"
+        cat "${TARGET_FILE}"
         rm "${TARGET_FILE}"
     else
         git add "${OUTPUT}"
