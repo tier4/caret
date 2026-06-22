@@ -20,7 +20,7 @@ function show_usage() {
     exit 0
 }
 
-ALLOWED_ROS_DISTRO=("humble" "iron" "jazzy")
+ALLOWED_ROS_DISTRO=("humble" "jazzy")
 
 function validate_ros_distro() {
     if [[ " ${ALLOWED_ROS_DISTRO[*]} " != *" $1 "* ]]; then
@@ -157,9 +157,7 @@ fi
 
 # Select playbook
 PLAYBOOK="playbook.yml"
-if [ "$ros_distro" = "iron" ]; then
-    PLAYBOOK="playbook_iron.yml"
-elif [ "$ros_distro" = "jazzy" ]; then
+if [ "$ros_distro" = "jazzy" ]; then
     PLAYBOOK="playbook_jazzy.yml"
 fi
 
