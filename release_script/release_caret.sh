@@ -139,9 +139,17 @@ for TEMPLATE in "${SCRIPT_DIR}"/template_caret_*.repos; do
     else
         OUTPUT="${ROOT_DIR}/caret_${TEMPLATE_DISTRO}.repos"
     fi
-    cp "${TEMPLATE}" "${OUTPUT}"
 
-    sed -i -e "s/CARET_TAG/${TAG_ID}/g" "${OUTPUT}"
+    # if dry-run, use temp file
+    if [ "${DRY_RUN}" == "echo" ]; then
+        TARGET_FILE=$(mktemp)
+        cp "${TEMPLATE}" "${TARGET_FILE}"
+    else
+        TARGET_FILE="${OUTPUT}"
+        cp "${TEMPLATE}" "${TARGET_FILE}"
+    fi
+
+    sed -i -e "s/CARET_TAG/${TAG_ID}/g" "${TARGET_FILE}"
 
     declare -A MAP=(
         ["ros2/rcl"]="RCL_HASH"
@@ -159,21 +167,22 @@ for TEMPLATE in "${SCRIPT_DIR}"/template_caret_*.repos; do
 
         if [ -d "$dir" ]; then
             hash=$(git -C "$dir" rev-parse HEAD)
-            sed -i -e "s/${placeholder}/${hash}/g" "${OUTPUT}"
+            sed -i -e "s/${placeholder}/${hash}/g" "${TARGET_FILE}"
         fi
     done
 
     if [ "${DRY_RUN}" == "echo" ]; then
         ${DRY_RUN} "--------------------------------------------------------"
-        ${DRY_RUN} "Generating ${OUTPUT} from ${FILENAME} (Dry-run mode)..."
+        ${DRY_RUN} "Dry-run: Previewing generated ${OUTPUT} from ${FILENAME}"
         ${DRY_RUN} "--------------------------------------------------------"
-        cat "${OUTPUT}"
+        cat "${TARGET_FILE}"
+        rm "${TARGET_FILE}"
     else
         git add "${OUTPUT}"
     fi
 done
 
-${DRY_RUN} git commit -m "release(${OUTPUT}): update versions for ${TAG_ID}"
+${DRY_RUN} git commit -m "release(repos): change version of sub repositories for ${TAG_ID}"
 ${DRY_RUN} git tag "${TAG_ID}"
 
 if [ "${PUSH_REMOTE}" == "true" ]; then
