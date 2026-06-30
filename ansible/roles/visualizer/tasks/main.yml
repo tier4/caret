@@ -6,11 +6,20 @@
     update_cache: true
   become: true
 
+# cspell:ignore fileglob
+- name: Pre-clean bokeh directory and metadata to prevent nested installation
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_fileglob:
+    - "{{ ansible_env.HOME }}/.local/lib/python3.10/site-packages/bokeh*"
+  become: false
+
 - name: Install caret dependent packages
   pip:
     requirements: "{{ requirements_path }}"
     executable: pip3
-    extra_args: --ignore-installed
+    extra_args: --force-reinstall
   become: false
   args:
     chdir: "{{ WORKSPACE_ROOT }}"
