@@ -6,6 +6,7 @@
     update_cache: true
   become: true
 
+# cspell:ignore fileglob
 - name: Pre-clean bokeh directory and metadata to prevent nested installation
   file:
     path: "{{ item }}"
