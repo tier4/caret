@@ -11,7 +11,7 @@
     paths: "{{ ansible_env.HOME }}/.local/lib"
     patterns: "*bokeh*"
     file_type: directory
-    recurse: yes
+    recurse: true
   register: bokeh_dirs
 
 - name: Remove found bokeh directories
