@@ -46,9 +46,6 @@ CARET_REPOS_ARRAY=("caret_trace"
 # supported ROS 2 distros
 SUPPORTED_DISTROS=("humble" "jazzy")
 
-# default distro
-DEFAULT_DISTRO=jazzy
-
 # variables
 DRY_RUN=
 TAG_ID=
@@ -127,7 +124,7 @@ for TEMPLATE in "${SCRIPT_DIR}"/template_caret_*.repos; do
 
     # get distro name from template file name (ex. template_caret_humble.repos -> humble)
     TEMPLATE_DISTRO=$(echo "$FILENAME" | sed -E 's/template_caret_(.*)\.repos/\1/')
-    if [[ $ROS_DISTRO == "$DEFAULT_DISTRO" && $TEMPLATE_DISTRO == "humble" ]]; then
+    if [[ $ROS_DISTRO == "jazzy" && $TEMPLATE_DISTRO == "humble" ]]; then
         echo "Skipping ${FILENAME} (Required external packages are missing in this workspace in the ${ROS_DISTRO} environment)."
         continue
     fi
@@ -136,8 +133,12 @@ for TEMPLATE in "${SCRIPT_DIR}"/template_caret_*.repos; do
         continue
     fi
 
-    # output file name: always caret_<distro>.repos
-    OUTPUT="${ROOT_DIR}/caret_${TEMPLATE_DISTRO}.repos"
+    # select output file name (humble is caret.repos, others are caret_distro.repos)
+    if [ "$TEMPLATE_DISTRO" == "humble" ]; then
+        OUTPUT="${ROOT_DIR}/caret.repos"
+    else
+        OUTPUT="${ROOT_DIR}/caret_${TEMPLATE_DISTRO}.repos"
+    fi
 
     # if dry-run, use temp file
     if [ "${DRY_RUN}" == "echo" ]; then
@@ -179,14 +180,6 @@ for TEMPLATE in "${SCRIPT_DIR}"/template_caret_*.repos; do
         git add "${OUTPUT}"
     fi
 done
-
-# Copy default distro repos as caret.repos
-if [ "${DRY_RUN}" == "echo" ]; then
-    ${DRY_RUN} "cp ${ROOT_DIR}/caret_${DEFAULT_DISTRO}.repos ${ROOT_DIR}/caret.repos"
-elif [ -f "${ROOT_DIR}/caret_${DEFAULT_DISTRO}.repos" ]; then
-    cp "${ROOT_DIR}/caret_${DEFAULT_DISTRO}.repos" "${ROOT_DIR}/caret.repos"
-    git add "${ROOT_DIR}/caret.repos"
-fi
 
 ${DRY_RUN} git commit -m "release(repos): change version of sub repositories for ${TAG_ID}"
 ${DRY_RUN} git tag "${TAG_ID}"

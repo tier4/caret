@@ -28,11 +28,6 @@ function validate_ros_distro() {
         echo "Supported ROS Distributions are ${ALLOWED_ROS_DISTRO[*]}" >&2
         exit 1
     fi
-    # Check that the running ROS_DISTRO environment matches the requested distro
-    if [ -n "${ROS_DISTRO:-}" ] && [ "${ROS_DISTRO}" != "$1" ]; then
-        echo "error: ROS_DISTRO environment variable (${ROS_DISTRO}) does not match requested distro ($1)." >&2
-        exit 1
-    fi
 }
 
 # parse command options.
@@ -44,8 +39,7 @@ eval set -- "$OPT"
 noninteractive=0
 package_install=1
 pip_install=1
-DEFAULT_DISTRO=jazzy
-ros_distro=${DEFAULT_DISTRO}
+ros_distro=humble
 
 while true; do
     case $1 in
@@ -82,11 +76,11 @@ export PATH="$HOME/.local/bin:$PATH"
 # Check ROS Distribution
 validate_ros_distro "$ros_distro"
 
-# Check PIP_BREAK_SYSTEM_PACKAGES for jazzy and later (PEP 668)
-if [[ ${ros_distro,,} == "jazzy" || ${ros_distro,,} > "jazzy" ]]; then
+# Jazzy Specific Check for PEP 668 ---
+if [ "$ros_distro" = "jazzy" ]; then
     env_val="${!PIP_BREAK_ENV:-0}"
     if [ "$env_val" != "1" ]; then
-        echo -e "\e[31m[ERROR] ROS 2 ${ros_distro^} (Ubuntu 24.04+) detected.\e[0m"
+        echo -e "\e[31m[ERROR] Ubuntu 24.04 (Jazzy) detected.\e[0m"
         echo "Starting from this version, pip installation into system packages is restricted by default."
         echo "To proceed with the installation, please run the following command first to acknowledge the risk:"
         echo ""
@@ -131,7 +125,7 @@ fi
 
 # Run ansible if confirmed
 # Install ansible
-if [ "$ros_distro" = "$DEFAULT_DISTRO" ]; then
+if [ "$ros_distro" = "jazzy" ]; then
     pip3 install -U ansible
 else
     ansible_version=$(pip3 list | grep -oP "^ansible\s+\K([0-9]+)" || true)
@@ -162,7 +156,10 @@ elif [ $noninteractive -eq 1 ]; then
 fi
 
 # Select playbook
-PLAYBOOK="playbook_${ros_distro}.yml"
+PLAYBOOK="playbook.yml"
+if [ "$ros_distro" = "jazzy" ]; then
+    PLAYBOOK="playbook_jazzy.yml"
+fi
 
 # Run ansible
 if ansible-playbook "$SCRIPT_DIR/ansible/$PLAYBOOK" -e WORKSPACE_ROOT="$SCRIPT_DIR" "${options[@]}"; then

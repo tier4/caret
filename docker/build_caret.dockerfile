@@ -1,4 +1,4 @@
-ARG ROS_DISTRO=jazzy
+ARG ROS_DISTRO=humble
 ARG CARET_VERSION="main"
 
 FROM ros:${ROS_DISTRO}
@@ -38,13 +38,14 @@ RUN apt update && apt install -y git && \
 # cspell: enable
 
 RUN echo "===== Setup CARET ====="
-COPY caret*.repos ros2_caret_ws/
 RUN cd ros2_caret_ws && \
     mkdir src && \
     if [ "$ROS_DISTRO" = "humble" ]; then \
-        REPOS_FILE=caret_humble.repos ; \
-    elif [ "$ROS_DISTRO" = "jazzy" ]; then \
         REPOS_FILE=caret.repos ; \
+    elif [ "$ROS_DISTRO" = "iron" ]; then \
+        REPOS_FILE=caret_iron.repos ; \
+    elif [ "$ROS_DISTRO" = "jazzy" ]; then \
+        REPOS_FILE=caret_jazzy.repos ; \
         export PIP_BREAK_SYSTEM_PACKAGES=1 ; \
     else \
         echo "Unsupported ROS_DISTRO: $ROS_DISTRO" && exit 1 ; \
@@ -62,4 +63,4 @@ RUN cd ros2_caret_ws && \
     if [ "$ROS_DISTRO" = "jazzy" ]; then \
       . $HOME/venv/jazzy/bin/activate ; \
     fi && \
-    colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DCMAKE_C_FLAGS="-std=c99"
+    colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF

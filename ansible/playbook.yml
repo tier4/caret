@@ -19,4 +19,4 @@
   roles:
     - { role: lttng, tags: [lttng], when: package_install == 'y' }
     - { role: visualizer, tags: [visualizer], when: package_install == 'y' }
-    - { role: caret_humble, rosdistro: humble, tags: [caret] }
+    - { role: caret, rosdistro: humble, tags: [caret] }
