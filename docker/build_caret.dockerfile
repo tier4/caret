@@ -42,8 +42,6 @@ RUN cd ros2_caret_ws && \
     mkdir src && \
     if [ "$ROS_DISTRO" = "humble" ]; then \
         REPOS_FILE=caret.repos ; \
-    elif [ "$ROS_DISTRO" = "iron" ]; then \
-        REPOS_FILE=caret_iron.repos ; \
     elif [ "$ROS_DISTRO" = "jazzy" ]; then \
         REPOS_FILE=caret_jazzy.repos ; \
         export PIP_BREAK_SYSTEM_PACKAGES=1 ; \
